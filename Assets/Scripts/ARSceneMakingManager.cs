@@ -117,6 +117,7 @@ public class ARSceneMakingManager : MonoBehaviour
     public string RelativePath;
     private int EnterCounter = 0;
     private bool firstInstall = true;
+    private bool SceneExists = false;
 
     GameObject FirstRedFlag_1;
     GameObject SecondRedFlag_1;
@@ -226,10 +227,24 @@ public class ARSceneMakingManager : MonoBehaviour
         {
             //TextLog.text = "Попытка найти белые линии (профили)";
             FindProfile();
-            InstallBlank();
+            if (SceneExists == true)
+            {
+                InstallBlank();
+            }
+            else
+            {
+                TextLog.text = "Зачем ты пытаешься загрузить радарограммы, если нет сцены? =(";
+            }
         }
         //TextLog.text = "Начинаю установку радарограмм";
-        InstallRadarogramFromFile();
+        if (SceneExists == true)
+        {
+            InstallRadarogramFromFile();
+        }
+        else
+        {
+            TextLog.text = "Зачем ты пытаешься загрузить радарограммы, если нет сцены? =(";
+        }
     }
 
     public void FindProfile()
@@ -241,6 +256,7 @@ public class ARSceneMakingManager : MonoBehaviour
         {
             if (go.name == "Flag_white(Clone)")
             {
+                SceneExists = true; // если был найден хоть один белый флаг - считаем что сцена существует. Иначе нет, и установка радарограмм запрещена
                 if (go.transform.Find("Number").GetComponent<TextMesh>().text == "1")
                 {
                     RadarogramCounter++;
@@ -565,16 +581,16 @@ public class ARSceneMakingManager : MonoBehaviour
                     
                     try
                     {
-                        webClient.DownloadFile(WebServerIP + "/0.jpg", RelativePath + "\\RyvenRadarograms" + "\\0.jpg");
-                        webClient.DownloadFile(WebServerIP + "/1.jpg", RelativePath + "\\RyvenRadarograms" + "\\1.jpg");
-                        webClient.DownloadFile(WebServerIP + "/2.jpg", RelativePath + "\\RyvenRadarograms" + "\\2.jpg");
-                        webClient.DownloadFile(WebServerIP + "/3.jpg", RelativePath + "\\RyvenRadarograms" + "\\3.jpg");
-                        webClient.DownloadFile(WebServerIP + "/4.jpg", RelativePath + "\\RyvenRadarograms" + "\\4.jpg");
-                        webClient.DownloadFile(WebServerIP + "/5.jpg", RelativePath + "\\RyvenRadarograms" + "\\5.jpg");
-                        webClient.DownloadFile(WebServerIP + "/6.jpg", RelativePath + "\\RyvenRadarograms" + "\\6.jpg");
-                        webClient.DownloadFile(WebServerIP + "/7.jpg", RelativePath + "\\RyvenRadarograms" + "\\7.jpg");
-                        webClient.DownloadFile(WebServerIP + "/8.jpg", RelativePath + "\\RyvenRadarograms" + "\\8.jpg");
-                        webClient.DownloadFile(WebServerIP + "/9.jpg", RelativePath + "\\RyvenRadarograms" + "\\9.jpg");
+                        webClient.DownloadFile(WebServerIP + "/0.png", RelativePath + "\\RyvenRadarograms" + "\\0.png");
+                        webClient.DownloadFile(WebServerIP + "/1.png", RelativePath + "\\RyvenRadarograms" + "\\1.png");
+                        webClient.DownloadFile(WebServerIP + "/2.png", RelativePath + "\\RyvenRadarograms" + "\\2.png");
+                        webClient.DownloadFile(WebServerIP + "/3.png", RelativePath + "\\RyvenRadarograms" + "\\3.png");
+                        webClient.DownloadFile(WebServerIP + "/4.png", RelativePath + "\\RyvenRadarograms" + "\\4.png");
+                        webClient.DownloadFile(WebServerIP + "/5.png", RelativePath + "\\RyvenRadarograms" + "\\5.png");
+                        webClient.DownloadFile(WebServerIP + "/6.png", RelativePath + "\\RyvenRadarograms" + "\\6.png");
+                        webClient.DownloadFile(WebServerIP + "/7.png", RelativePath + "\\RyvenRadarograms" + "\\7.png");
+                        webClient.DownloadFile(WebServerIP + "/8.png", RelativePath + "\\RyvenRadarograms" + "\\8.png");
+                        webClient.DownloadFile(WebServerIP + "/9.png", RelativePath + "\\RyvenRadarograms" + "\\9.png");
                     }
                     catch (System.Exception)
                     {
@@ -584,13 +600,13 @@ public class ARSceneMakingManager : MonoBehaviour
                     }
                     if(FirstObg_10 != null)
                     {
-                        if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\9.jpg") && (myJsonRadarogramData.images.jpg9[0] != 0))
+                        if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\9.png") && (myJsonRadarogramData.images.jpg9[0] != 0))
                         {
                             SecondPosition_10 = FirstPosition_10 + (normalizedDirection_10 * myJsonRadarogramData.images.jpg9[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                             SecondObg_10.transform.position = SecondPosition_10; // отодвигаем второй белый флаг, чтобы влезла радарограмма
                             MyCenter_10 = Vector3.Lerp(FirstPosition_10, SecondPosition_10, 0.5f);
                             RG_10.transform.position = MyCenter_10;
-                            RG_10.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\9.jpg");
+                            RG_10.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\9.png");
                             RG_10.transform.position += new Vector3(0, 1.5f, 0);
                             RG_10.name = "radarogramPrefab_10";
                         }
@@ -602,13 +618,13 @@ public class ARSceneMakingManager : MonoBehaviour
 
                     if(FirstObg_9 != null)
                     {
-                        if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\8.jpg") && (myJsonRadarogramData.images.jpg8[0] != 0))
+                        if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\8.png") && (myJsonRadarogramData.images.jpg8[0] != 0))
                         {
                             SecondPosition_9 = FirstPosition_9 + (normalizedDirection_9 * myJsonRadarogramData.images.jpg8[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                             SecondObg_9.transform.position = SecondPosition_9; // отодвигаем второй белый флаг, чтобы влезла радарограмма
                             MyCenter_9 = Vector3.Lerp(FirstPosition_9, SecondPosition_9, 0.5f);
                             RG_9.transform.position = MyCenter_9;
-                            RG_9.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\8.jpg");
+                            RG_9.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\8.png");
                             RG_9.transform.position += new Vector3(0, 1.5f, 0);
                             RG_9.name = "radarogramPrefab_9";
                         }
@@ -620,13 +636,13 @@ public class ARSceneMakingManager : MonoBehaviour
 
                     if(FirstObg_8 != null)
                     {
-                        if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\7.jpg") && (myJsonRadarogramData.images.jpg7[0] != 0))
+                        if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\7.png") && (myJsonRadarogramData.images.jpg7[0] != 0))
                         {
                             SecondPosition_8 = FirstPosition_8 + (normalizedDirection_8 * myJsonRadarogramData.images.jpg7[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                             SecondObg_8.transform.position = SecondPosition_8; // отодвигаем второй белый флаг, чтобы влезла радарограмма
                             MyCenter_8 = Vector3.Lerp(FirstPosition_8, SecondPosition_8, 0.5f);
                             RG_8.transform.position = MyCenter_8;
-                            RG_8.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\7.jpg");
+                            RG_8.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\7.png");
                             RG_8.transform.position += new Vector3(0, 1.5f, 0);
                             RG_8.name = "radarogramPrefab_8";
                         }
@@ -638,13 +654,13 @@ public class ARSceneMakingManager : MonoBehaviour
 
                     if(FirstObg_7 != null)
                     {
-                        if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\6.jpg") && (myJsonRadarogramData.images.jpg6[0] != 0))
+                        if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\6.png") && (myJsonRadarogramData.images.jpg6[0] != 0))
                         {
                             SecondPosition_7 = FirstPosition_7 + (normalizedDirection_7 * myJsonRadarogramData.images.jpg6[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                             SecondObg_7.transform.position = SecondPosition_7; // отодвигаем второй белый флаг, чтобы влезла радарограмма
                             MyCenter_7 = Vector3.Lerp(FirstPosition_7, SecondPosition_7, 0.5f);
                             RG_7.transform.position = MyCenter_7;
-                            RG_7.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\6.jpg");
+                            RG_7.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\6.png");
                             RG_7.transform.position += new Vector3(0, 1.5f, 0);
                             RG_7.name = "radarogramPrefab_7";
                         }
@@ -656,13 +672,13 @@ public class ARSceneMakingManager : MonoBehaviour
 
                     if(FirstObg_6 != null)
                     {
-                        if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\5.jpg") && (myJsonRadarogramData.images.jpg5[0] != 0))
+                        if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\5.png") && (myJsonRadarogramData.images.jpg5[0] != 0))
                         {
                             SecondPosition_6 = FirstPosition_6 + (normalizedDirection_6 * myJsonRadarogramData.images.jpg5[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                             SecondObg_6.transform.position = SecondPosition_6; // отодвигаем второй белый флаг, чтобы влезла радарограмма
                             MyCenter_6 = Vector3.Lerp(FirstPosition_6, SecondPosition_6, 0.5f);
                             RG_6.transform.position = MyCenter_6;
-                            RG_6.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\5.jpg");
+                            RG_6.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\5.png");
                             RG_6.transform.position += new Vector3(0, 1.5f, 0);
                             RG_6.name = "radarogramPrefab_6";
                         }
@@ -674,13 +690,13 @@ public class ARSceneMakingManager : MonoBehaviour
 
                     if(FirstObg_5 != null)
                     {
-                        if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\4.jpg") && (myJsonRadarogramData.images.jpg4[0] != 0))
+                        if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\4.png") && (myJsonRadarogramData.images.jpg4[0] != 0))
                         {
                             SecondPosition_5 = FirstPosition_5 + (normalizedDirection_5 * myJsonRadarogramData.images.jpg4[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                             SecondObg_5.transform.position = SecondPosition_5; // отодвигаем второй белый флаг, чтобы влезла радарограмма
                             MyCenter_5 = Vector3.Lerp(FirstPosition_5, SecondPosition_5, 0.5f);
                             RG_5.transform.position = MyCenter_5;
-                            RG_5.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\4.jpg");
+                            RG_5.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\4.png");
                             RG_5.transform.position += new Vector3(0, 1.5f, 0);
                             RG_5.name = "radarogramPrefab_5";
                         }
@@ -692,13 +708,13 @@ public class ARSceneMakingManager : MonoBehaviour
 
                     if(FirstObg_4 != null)
                     {
-                        if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\3.jpg") && (myJsonRadarogramData.images.jpg3[0] != 0))
+                        if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\3.png") && (myJsonRadarogramData.images.jpg3[0] != 0))
                         {
                             SecondPosition_4 = FirstPosition_4 + (normalizedDirection_4 * myJsonRadarogramData.images.jpg3[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                             SecondObg_4.transform.position = SecondPosition_4; // отодвигаем второй белый флаг, чтобы влезла радарограмма
                             MyCenter_4 = Vector3.Lerp(FirstPosition_4, SecondPosition_4, 0.5f);
                             RG_4.transform.position = MyCenter_4;
-                            RG_4.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\3.jpg");
+                            RG_4.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\3.png");
                             RG_4.transform.position += new Vector3(0, 1.5f, 0);
                             RG_4.name = "radarogramPrefab_4";
                         }
@@ -710,13 +726,13 @@ public class ARSceneMakingManager : MonoBehaviour
 
                     if(FirstObg_3 != null)
                     {
-                        if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\2.jpg") && (myJsonRadarogramData.images.jpg2[0] != 0))
+                        if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\2.png") && (myJsonRadarogramData.images.jpg2[0] != 0))
                         {
                             SecondPosition_3 = FirstPosition_3 + (normalizedDirection_3 * myJsonRadarogramData.images.jpg2[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                             SecondObg_3.transform.position = SecondPosition_3; // отодвигаем второй белый флаг, чтобы влезла радарограмма
                             MyCenter_3 = Vector3.Lerp(FirstPosition_3, SecondPosition_3, 0.5f);
                             RG_3.transform.position = MyCenter_3;
-                            RG_3.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\2.jpg");
+                            RG_3.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\2.png");
                             RG_3.transform.position += new Vector3(0, 1.5f, 0);
                             RG_3.name = "radarogramPrefab_3";
                         }
@@ -728,13 +744,13 @@ public class ARSceneMakingManager : MonoBehaviour
 
                     if(FirstObg_2 != null)
                     {
-                        if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\1.jpg") && (myJsonRadarogramData.images.jpg1[0] != 0))
+                        if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\1.png") && (myJsonRadarogramData.images.jpg1[0] != 0))
                         {
                             SecondPosition_2 = FirstPosition_2 + (normalizedDirection_2 * myJsonRadarogramData.images.jpg1[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                             SecondObg_2.transform.position = SecondPosition_2; // отодвигаем второй белый флаг, чтобы влезла радарограмма
                             MyCenter_2 = Vector3.Lerp(FirstPosition_2, SecondPosition_2, 0.5f);
                             RG_2.transform.position = MyCenter_2;
-                            RG_2.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\1.jpg");
+                            RG_2.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\1.png");
                             RG_2.transform.position += new Vector3(0, 1.5f, 0);
                             RG_2.name = "radarogramPrefab_2";
                         }
@@ -746,13 +762,13 @@ public class ARSceneMakingManager : MonoBehaviour
 
                     if(FirstObg_1 != null)
                     {
-                        if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\0.jpg") && (myJsonRadarogramData.images.jpg0[0] != 0))
+                        if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\0.png") && (myJsonRadarogramData.images.jpg0[0] != 0))
                         {
                             SecondPosition_1 = FirstPosition_1 + (normalizedDirection_1 * myJsonRadarogramData.images.jpg0[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                             SecondObg_1.transform.position = SecondPosition_1; // отодвигаем второй белый флаг, чтобы влезла радарограмма
                             MyCenter_1 = Vector3.Lerp(FirstPosition_1, SecondPosition_1, 0.5f);
                             RG_1.transform.position = MyCenter_1;
-                            RG_1.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\0.jpg");
+                            RG_1.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\0.png");
                             RG_1.transform.position += new Vector3(0, 1.5f, 0);
                             RG_1.name = "radarogramPrefab_1";
                         }
@@ -775,7 +791,28 @@ public class ARSceneMakingManager : MonoBehaviour
 
             if(FirstObg_10 != null)
             {
-                if(File.Exists(RelativePath + "\\Radarograms" + "\\9.jpg") && (myJsonRadarogramData.images.jpg9[0] != 0))
+                if(File.Exists(RelativePath + "\\Radarograms" + "\\9.png") && (myJsonRadarogramData.images.jpg9[0] != 0))
+                {
+                    SecondPosition_10 = FirstPosition_10 + (normalizedDirection_10 * myJsonRadarogramData.images.jpg9[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
+                    SecondObg_10.transform.position = SecondPosition_10; // отодвигаем второй белый флаг, чтобы влезла радарограмма
+                    MyCenter_10 = Vector3.Lerp(FirstPosition_10, SecondPosition_10, 0.5f);
+                    RG_10.transform.position = MyCenter_10;
+                    RG_10.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\Radarograms" + "\\9.png");
+
+                    // if(WhichSide == false)
+                    // {
+                    //     RG_10.GetComponent<SpriteRenderer>().sortingOrder = 10;
+                    // }
+                    // else
+                    // {
+                    //     RG_10.GetComponent<SpriteRenderer>().sortingOrder = 1;
+                    // }
+
+                    //RG_10.transform.Find("Number").GetComponent<TextMesh>().text = RG_10.GetComponent<SpriteRenderer>().sortingOrder.ToString();
+                    RG_10.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_10.name = "radarogramPrefab_10";
+                }
+                else if(File.Exists(RelativePath + "\\Radarograms" + "\\9.jpg") && (myJsonRadarogramData.images.jpg9[0] != 0))
                 {
                     SecondPosition_10 = FirstPosition_10 + (normalizedDirection_10 * myJsonRadarogramData.images.jpg9[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                     SecondObg_10.transform.position = SecondPosition_10; // отодвигаем второй белый флаг, чтобы влезла радарограмма
@@ -804,7 +841,28 @@ public class ARSceneMakingManager : MonoBehaviour
 
             if(FirstObg_9 != null)
             {
-                if(File.Exists(RelativePath + "\\Radarograms" + "\\8.jpg") && (myJsonRadarogramData.images.jpg8[0] != 0))
+                if(File.Exists(RelativePath + "\\Radarograms" + "\\8.png") && (myJsonRadarogramData.images.jpg8[0] != 0))
+                {
+                    SecondPosition_9 = FirstPosition_9 + (normalizedDirection_9 * myJsonRadarogramData.images.jpg8[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
+                    SecondObg_9.transform.position = SecondPosition_9; // отодвигаем второй белый флаг, чтобы влезла радарограмма
+                    MyCenter_9 = Vector3.Lerp(FirstPosition_9, SecondPosition_9, 0.5f);
+                    RG_9.transform.position = MyCenter_9;
+                    RG_9.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\Radarograms" + "\\8.png");
+
+                    // if(WhichSide == false)
+                    // {
+                    //     RG_9.GetComponent<SpriteRenderer>().sortingOrder = 9;
+                    // }
+                    // else
+                    // {
+                    //     RG_9.GetComponent<SpriteRenderer>().sortingOrder = 2;
+                    // }
+
+                    //RG_9.transform.Find("Number").GetComponent<TextMesh>().text = RG_9.GetComponent<SpriteRenderer>().sortingOrder.ToString();
+                    RG_9.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_9.name = "radarogramPrefab_9";
+                }
+                else if(File.Exists(RelativePath + "\\Radarograms" + "\\8.jpg") && (myJsonRadarogramData.images.jpg8[0] != 0))
                 {
                     SecondPosition_9 = FirstPosition_9 + (normalizedDirection_9 * myJsonRadarogramData.images.jpg8[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                     SecondObg_9.transform.position = SecondPosition_9; // отодвигаем второй белый флаг, чтобы влезла радарограмма
@@ -833,7 +891,28 @@ public class ARSceneMakingManager : MonoBehaviour
 
             if(FirstObg_8 != null)
             {
-                if(File.Exists(RelativePath + "\\Radarograms" + "\\7.jpg") && (myJsonRadarogramData.images.jpg7[0] != 0))
+                if(File.Exists(RelativePath + "\\Radarograms" + "\\7.png") && (myJsonRadarogramData.images.jpg7[0] != 0))
+                {
+                    SecondPosition_8 = FirstPosition_8 + (normalizedDirection_8 * myJsonRadarogramData.images.jpg7[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
+                    SecondObg_8.transform.position = SecondPosition_8; // отодвигаем второй белый флаг, чтобы влезла радарограмма
+                    MyCenter_8 = Vector3.Lerp(FirstPosition_8, SecondPosition_8, 0.5f);
+                    RG_8.transform.position = MyCenter_8;
+                    RG_8.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\Radarograms" + "\\7.png");
+
+                    // if(WhichSide == false)
+                    // {
+                    //     RG_8.GetComponent<SpriteRenderer>().sortingOrder = 8;
+                    // }
+                    // else
+                    // {
+                    //     RG_8.GetComponent<SpriteRenderer>().sortingOrder = 3;
+                    // }
+
+                    //RG_8.transform.Find("Number").GetComponent<TextMesh>().text = RG_8.GetComponent<SpriteRenderer>().sortingOrder.ToString();
+                    RG_8.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_8.name = "radarogramPrefab_8";
+                }
+                else if(File.Exists(RelativePath + "\\Radarograms" + "\\7.jpg") && (myJsonRadarogramData.images.jpg7[0] != 0))
                 {
                     SecondPosition_8 = FirstPosition_8 + (normalizedDirection_8 * myJsonRadarogramData.images.jpg7[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                     SecondObg_8.transform.position = SecondPosition_8; // отодвигаем второй белый флаг, чтобы влезла радарограмма
@@ -862,7 +941,28 @@ public class ARSceneMakingManager : MonoBehaviour
 
             if(FirstObg_7 != null)
             {
-                if(File.Exists(RelativePath + "\\Radarograms" + "\\6.jpg") && (myJsonRadarogramData.images.jpg6[0] != 0))
+                if(File.Exists(RelativePath + "\\Radarograms" + "\\6.png") && (myJsonRadarogramData.images.jpg6[0] != 0))
+                {
+                    SecondPosition_7 = FirstPosition_7 + (normalizedDirection_7 * myJsonRadarogramData.images.jpg6[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
+                    SecondObg_7.transform.position = SecondPosition_7; // отодвигаем второй белый флаг, чтобы влезла радарограмма
+                    MyCenter_7 = Vector3.Lerp(FirstPosition_7, SecondPosition_7, 0.5f);
+                    RG_7.transform.position = MyCenter_7;
+                    RG_7.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\Radarograms" + "\\6.png");
+
+                    // if(WhichSide == false)
+                    // {
+                    //     RG_7.GetComponent<SpriteRenderer>().sortingOrder = 7;
+                    // }
+                    // else
+                    // {
+                    //     RG_7.GetComponent<SpriteRenderer>().sortingOrder = 4;
+                    // }
+
+                    //RG_7.transform.Find("Number").GetComponent<TextMesh>().text = RG_7.GetComponent<SpriteRenderer>().sortingOrder.ToString();
+                    RG_7.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_7.name = "radarogramPrefab_7";
+                }
+                else if(File.Exists(RelativePath + "\\Radarograms" + "\\6.jpg") && (myJsonRadarogramData.images.jpg6[0] != 0))
                 {
                     SecondPosition_7 = FirstPosition_7 + (normalizedDirection_7 * myJsonRadarogramData.images.jpg6[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                     SecondObg_7.transform.position = SecondPosition_7; // отодвигаем второй белый флаг, чтобы влезла радарограмма
@@ -891,7 +991,28 @@ public class ARSceneMakingManager : MonoBehaviour
 
             if(FirstObg_6 != null)
             {
-                if(File.Exists(RelativePath + "\\Radarograms" + "\\5.jpg") && (myJsonRadarogramData.images.jpg5[0] != 0))
+                if(File.Exists(RelativePath + "\\Radarograms" + "\\5.png") && (myJsonRadarogramData.images.jpg5[0] != 0))
+                {
+                    SecondPosition_6 = FirstPosition_6 + (normalizedDirection_6 * myJsonRadarogramData.images.jpg5[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
+                    SecondObg_6.transform.position = SecondPosition_6; // отодвигаем второй белый флаг, чтобы влезла радарограмма
+                    MyCenter_6 = Vector3.Lerp(FirstPosition_6, SecondPosition_6, 0.5f);
+                    RG_6.transform.position = MyCenter_6;
+                    RG_6.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\Radarograms" + "\\5.png");
+
+                    // if(WhichSide == false)
+                    // {
+                    //     RG_6.GetComponent<SpriteRenderer>().sortingOrder = 6;
+                    // }
+                    // else
+                    // {
+                    //     RG_6.GetComponent<SpriteRenderer>().sortingOrder = 5;
+                    // }
+
+                    //RG_6.transform.Find("Number").GetComponent<TextMesh>().text = RG_6.GetComponent<SpriteRenderer>().sortingOrder.ToString();
+                    RG_6.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_6.name = "radarogramPrefab_6";
+                }
+                else if(File.Exists(RelativePath + "\\Radarograms" + "\\5.jpg") && (myJsonRadarogramData.images.jpg5[0] != 0))
                 {
                     SecondPosition_6 = FirstPosition_6 + (normalizedDirection_6 * myJsonRadarogramData.images.jpg5[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                     SecondObg_6.transform.position = SecondPosition_6; // отодвигаем второй белый флаг, чтобы влезла радарограмма
@@ -920,7 +1041,28 @@ public class ARSceneMakingManager : MonoBehaviour
 
             if(FirstObg_5 != null)
             {
-                if(File.Exists(RelativePath + "\\Radarograms" + "\\4.jpg") && (myJsonRadarogramData.images.jpg4[0] != 0))
+                if(File.Exists(RelativePath + "\\Radarograms" + "\\4.png") && (myJsonRadarogramData.images.jpg4[0] != 0))
+                {
+                    SecondPosition_5 = FirstPosition_5 + (normalizedDirection_5 * myJsonRadarogramData.images.jpg4[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
+                    SecondObg_5.transform.position = SecondPosition_5; // отодвигаем второй белый флаг, чтобы влезла радарограмма
+                    MyCenter_5 = Vector3.Lerp(FirstPosition_5, SecondPosition_5, 0.5f);
+                    RG_5.transform.position = MyCenter_5;
+                    RG_5.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\Radarograms" + "\\4.png");
+
+                    // if(WhichSide == false)
+                    // {
+                    //     RG_5.GetComponent<SpriteRenderer>().sortingOrder = 5;
+                    // }
+                    // else
+                    // {
+                    //     RG_5.GetComponent<SpriteRenderer>().sortingOrder = 6;
+                    // }
+
+                    //RG_5.transform.Find("Number").GetComponent<TextMesh>().text = RG_5.GetComponent<SpriteRenderer>().sortingOrder.ToString();
+                    RG_5.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_5.name = "radarogramPrefab_5";
+                }
+                else if(File.Exists(RelativePath + "\\Radarograms" + "\\4.jpg") && (myJsonRadarogramData.images.jpg4[0] != 0))
                 {
                     SecondPosition_5 = FirstPosition_5 + (normalizedDirection_5 * myJsonRadarogramData.images.jpg4[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                     SecondObg_5.transform.position = SecondPosition_5; // отодвигаем второй белый флаг, чтобы влезла радарограмма
@@ -949,7 +1091,28 @@ public class ARSceneMakingManager : MonoBehaviour
 
             if(FirstObg_4 != null)
             {
-                if(File.Exists(RelativePath + "\\Radarograms" + "\\3.jpg") && (myJsonRadarogramData.images.jpg3[0] != 0))
+                if(File.Exists(RelativePath + "\\Radarograms" + "\\3.png") && (myJsonRadarogramData.images.jpg3[0] != 0))
+                {
+                    SecondPosition_4 = FirstPosition_4 + (normalizedDirection_4 * myJsonRadarogramData.images.jpg3[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
+                    SecondObg_4.transform.position = SecondPosition_4; // отодвигаем второй белый флаг, чтобы влезла радарограмма
+                    MyCenter_4 = Vector3.Lerp(FirstPosition_4, SecondPosition_4, 0.5f);
+                    RG_4.transform.position = MyCenter_4;
+                    RG_4.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\Radarograms" + "\\3.png");
+
+                    // if(WhichSide == false)
+                    // {
+                    //     RG_4.GetComponent<SpriteRenderer>().sortingOrder = 4;
+                    // }
+                    // else
+                    // {
+                    //     RG_4.GetComponent<SpriteRenderer>().sortingOrder = 7;
+                    // }
+
+                    //RG_4.transform.Find("Number").GetComponent<TextMesh>().text = RG_4.GetComponent<SpriteRenderer>().sortingOrder.ToString();
+                    RG_4.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_4.name = "radarogramPrefab_4";
+                }
+                else if(File.Exists(RelativePath + "\\Radarograms" + "\\3.jpg") && (myJsonRadarogramData.images.jpg3[0] != 0))
                 {
                     SecondPosition_4 = FirstPosition_4 + (normalizedDirection_4 * myJsonRadarogramData.images.jpg3[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                     SecondObg_4.transform.position = SecondPosition_4; // отодвигаем второй белый флаг, чтобы влезла радарограмма
@@ -978,7 +1141,28 @@ public class ARSceneMakingManager : MonoBehaviour
 
             if(FirstObg_3 != null)
             {
-                if(File.Exists(RelativePath + "\\Radarograms" + "\\2.jpg") && (myJsonRadarogramData.images.jpg2[0] != 0))
+                if(File.Exists(RelativePath + "\\Radarograms" + "\\2.png") && (myJsonRadarogramData.images.jpg2[0] != 0))
+                {
+                    SecondPosition_3 = FirstPosition_3 + (normalizedDirection_3 * myJsonRadarogramData.images.jpg2[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
+                    SecondObg_3.transform.position = SecondPosition_3; // отодвигаем второй белый флаг, чтобы влезла радарограмма
+                    MyCenter_3 = Vector3.Lerp(FirstPosition_3, SecondPosition_3, 0.5f);
+                    RG_3.transform.position = MyCenter_3;
+                    RG_3.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\Radarograms" + "\\2.png");
+                    
+                    // if(WhichSide == false)
+                    // {
+                    //     RG_3.GetComponent<SpriteRenderer>().sortingOrder = 3;
+                    // }
+                    // else
+                    // {
+                    //     RG_3.GetComponent<SpriteRenderer>().sortingOrder = 8;
+                    // }
+
+                    //RG_3.transform.Find("Number").GetComponent<TextMesh>().text = RG_3.GetComponent<SpriteRenderer>().sortingOrder.ToString();
+                    RG_3.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_3.name = "radarogramPrefab_3";
+                }
+                else if(File.Exists(RelativePath + "\\Radarograms" + "\\2.jpg") && (myJsonRadarogramData.images.jpg2[0] != 0))
                 {
                     SecondPosition_3 = FirstPosition_3 + (normalizedDirection_3 * myJsonRadarogramData.images.jpg2[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                     SecondObg_3.transform.position = SecondPosition_3; // отодвигаем второй белый флаг, чтобы влезла радарограмма
@@ -1007,7 +1191,28 @@ public class ARSceneMakingManager : MonoBehaviour
 
             if(FirstObg_2 != null)
             {
-                if(File.Exists(RelativePath + "\\Radarograms" + "\\1.jpg") && (myJsonRadarogramData.images.jpg1[0] != 0))
+                if(File.Exists(RelativePath + "\\Radarograms" + "\\1.png") && (myJsonRadarogramData.images.jpg1[0] != 0))
+                {
+                    SecondPosition_2 = FirstPosition_2 + (normalizedDirection_2 * myJsonRadarogramData.images.jpg1[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
+                    SecondObg_2.transform.position = SecondPosition_2; // отодвигаем второй белый флаг, чтобы влезла радарограмма
+                    MyCenter_2 = Vector3.Lerp(FirstPosition_2, SecondPosition_2, 0.5f);
+                    RG_2.transform.position = MyCenter_2;
+                    RG_2.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\Radarograms" + "\\1.png");
+                    
+                    // if(WhichSide == false)
+                    // {
+                    //     RG_2.GetComponent<SpriteRenderer>().sortingOrder = 2;
+                    // }
+                    // else
+                    // {
+                    //     RG_2.GetComponent<SpriteRenderer>().sortingOrder = 9;
+                    // }
+
+                    //RG_2.transform.Find("Number").GetComponent<TextMesh>().text = RG_2.GetComponent<SpriteRenderer>().sortingOrder.ToString();
+                    RG_2.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_2.name = "radarogramPrefab_2";
+                }
+                else if(File.Exists(RelativePath + "\\Radarograms" + "\\1.jpg") && (myJsonRadarogramData.images.jpg1[0] != 0))
                 {
                     SecondPosition_2 = FirstPosition_2 + (normalizedDirection_2 * myJsonRadarogramData.images.jpg1[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                     SecondObg_2.transform.position = SecondPosition_2; // отодвигаем второй белый флаг, чтобы влезла радарограмма
@@ -1036,7 +1241,28 @@ public class ARSceneMakingManager : MonoBehaviour
 
             if(FirstObg_1 != null)
             {
-                if(File.Exists(RelativePath + "\\Radarograms" + "\\0.jpg") && (myJsonRadarogramData.images.jpg0[0] != 0))
+                if(File.Exists(RelativePath + "\\Radarograms" + "\\0.png") && (myJsonRadarogramData.images.jpg0[0] != 0))
+                {
+                    SecondPosition_1 = FirstPosition_1 + (normalizedDirection_1 * myJsonRadarogramData.images.jpg0[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
+                    SecondObg_1.transform.position = SecondPosition_1; // отодвигаем второй белый флаг, чтобы влезла радарограмма
+                    MyCenter_1 = Vector3.Lerp(FirstPosition_1, SecondPosition_1, 0.5f);
+                    RG_1.transform.position = MyCenter_1;
+                    RG_1.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\Radarograms" + "\\0.png");
+
+                    // if(WhichSide == false)
+                    // {
+                    //     RG_1.GetComponent<SpriteRenderer>().sortingOrder = 1;
+                    // }
+                    // else
+                    // {
+                    //     RG_1.GetComponent<SpriteRenderer>().sortingOrder = 10;
+                    // }
+
+                    //RG_1.transform.Find("Number").GetComponent<TextMesh>().text = RG_1.GetComponent<SpriteRenderer>().sortingOrder.ToString();
+                    RG_1.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_1.name = "radarogramPrefab_1";
+                }
+                else if(File.Exists(RelativePath + "\\Radarograms" + "\\0.jpg") && (myJsonRadarogramData.images.jpg0[0] != 0))
                 {
                     SecondPosition_1 = FirstPosition_1 + (normalizedDirection_1 * myJsonRadarogramData.images.jpg0[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                     SecondObg_1.transform.position = SecondPosition_1; // отодвигаем второй белый флаг, чтобы влезла радарограмма
@@ -1217,15 +1443,29 @@ public class ARSceneMakingManager : MonoBehaviour
             WebServerIP = "http://192.168.110.33:8000";
         }
         GameObject.Find("SettingsButton").GetComponent<TestButton>().testClickBut(); // закрываю окно settings
-        StartCoroutine("LogCoroutine");
         InitWeb();
         RadarogramPath = "\\RyvenRadarograms\\data.json";
         if (firstInstall == true)
         {
             FindProfile();
-            InstallBlank();
+            if (SceneExists == true)
+            {
+                InstallBlank();
+            }
+            else
+            {
+                TextLog.text = "Зачем ты пытаешься загрузить радарограммы, если нет сцены? =(";
+            }
         }
-        FlagRyvenServerConnect = true;
+        if (SceneExists == true)
+        {
+            StartCoroutine("LogCoroutine");
+            FlagRyvenServerConnect = true;
+        }
+        else
+        {
+            TextLog.text = "Зачем ты пытаешься загрузить радарограммы, если нет сцены? =(";
+        }
     }
 
     IEnumerator LogCoroutine()
