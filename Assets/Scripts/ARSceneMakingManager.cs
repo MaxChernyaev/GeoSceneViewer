@@ -130,6 +130,7 @@ public class ARSceneMakingManager : MonoBehaviour
     private bool FlagRyvenServerConnect = false;
 
     private string input;
+    private bool SmoothMove = false;
 
     //  private bool WhichSide = true;
 
@@ -164,6 +165,7 @@ public class ARSceneMakingManager : MonoBehaviour
     void Start()
     {   
         Screen.fullScreen = true;
+        Application.targetFrameRate = 30; // ограничение в 30 fps
         RelativePath = Directory.GetCurrentDirectory();
         //QualitySettings.vSyncCount = 0; // попытка снизить нагрузку на GPU
         
@@ -184,6 +186,15 @@ public class ARSceneMakingManager : MonoBehaviour
         {
             InstallRadarogramFromWebServer();
         }
+
+        // плавное обнуление положения камеры по кнопке Alt
+        if (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt))
+            SmoothMove = true;
+        if ((transform.position - new Vector3(0,1,0)).y > 0.1f && SmoothMove == true)
+            transform.position = Vector3.Lerp(transform.position, new Vector3(0,1,0), 0.05f);
+        else
+            SmoothMove = false;
+
 
         // try
         // {
