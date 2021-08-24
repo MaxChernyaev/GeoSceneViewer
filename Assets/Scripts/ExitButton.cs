@@ -1,25 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ExitButton : MonoBehaviour
 {
+    [SerializeField] private Text TextLog;
     [SerializeField] private GameObject ExitMenu;
+    private bool MenuActive;
 
     // Start is called before the first frame update
     void Start()
     {
-        ExitMenu.SetActive(false);
+        MenuActive = false;
+        ExitMenu.SetActive(MenuActive);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey("escape"))  // если нажата клавиша Esc (Escape)
+        if (Input.GetKeyDown(KeyCode.Escape) && (MenuActive == false))  // если нажата клавиша Esc (Escape) и меню было ЗЫКРЫТО
       	{
-            ExitMenu.SetActive(true);
+            MenuActive = true;
+            ExitMenu.SetActive(MenuActive);
+
             //GameObject.Find("Main Camera").GetComponent<FlyCamera>().permissionToMove = false;
       	}
+        else if (Input.GetKeyDown(KeyCode.Escape) && (MenuActive == true))  // если нажата клавиша Esc (Escape) и меню было ОТКРЫТО
+        {
+            ExitNoButton();
+            //xyuButton();
+        }
+        else if (Input.GetKeyDown(KeyCode.Return) && (MenuActive == true)) // если нажата клавиша Enter и меню было ОТКРЫТО
+        {
+            ExitYesButton();
+        }
     }
 
     public void ExitYesButton()
@@ -30,7 +45,7 @@ public class ExitButton : MonoBehaviour
     public void ExitNoButton()
     {
         //GameObject.Find("Main Camera").GetComponent<FlyCamera>().permissionToMove = true;
-        ExitMenu.SetActive(false);
+        MenuActive = false;
+        ExitMenu.SetActive(MenuActive);
     }
-    
 }
