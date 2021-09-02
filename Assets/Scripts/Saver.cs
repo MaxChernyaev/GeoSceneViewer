@@ -146,7 +146,7 @@ public class Saver : MonoBehaviour
 
 
     /// <summary>
-    /// Сохранить данные кубов.
+    /// Сохранить данные объектов
     /// </summary>
     public void Save(CommonSaveData saveData)
     {

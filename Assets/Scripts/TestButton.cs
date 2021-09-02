@@ -26,7 +26,8 @@ public class TestButton : MonoBehaviour
         StartCoroutine("ClickScale");
         MenuActive = !MenuActive;
         SettingsMenu.SetActive(MenuActive);
-        GameObject.Find("Main Camera").GetComponent<FlyCamera>().permissionToMove = !GameObject.Find("Main Camera").GetComponent<FlyCamera>().permissionToMove;
+        GameObject.Find("Main Camera").GetComponent<FlyCamera>().permissionToMoveMouse = !GameObject.Find("Main Camera").GetComponent<FlyCamera>().permissionToMoveMouse;
+        GameObject.Find("Main Camera").GetComponent<FlyCamera>().permissionToMoveKey = !GameObject.Find("Main Camera").GetComponent<FlyCamera>().permissionToMoveKey;
     }
 
     IEnumerator ClickScale()

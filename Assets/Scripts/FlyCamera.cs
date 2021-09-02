@@ -23,7 +23,8 @@ public class FlyCamera : MonoBehaviour
     private float totalRun= 1.0f;
     //private string InputField;
     //private string LastInputField = "";
-    public bool permissionToMove = true; 
+    public bool permissionToMoveMouse = true; // для того, чтобы не крутилась камера мышкой, когда открыто меню настроек
+    public bool permissionToMoveKey = true; // для того чтобы не нажимались WASDQE, когда открыто меню настроек
     Vector3 p;
     private float sensitivity = 3; // чувствительность мышки
     private float X, Y;
@@ -41,7 +42,7 @@ public class FlyCamera : MonoBehaviour
         //transform.eulerAngles = lastMouse;
         lastMouse =  Input.mousePosition;
 
-        if(permissionToMove)
+        if(permissionToMoveMouse)
         {
             // юзаю Input.GetAxis("Mouse X") который берет дельту перемещения мыши напрямуюя
             X = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * sensitivity;
@@ -52,7 +53,7 @@ public class FlyCamera : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Mouse1))
         {
-            permissionToMove = !permissionToMove;
+            permissionToMoveMouse = !permissionToMoveMouse;
         }
 
 
@@ -115,23 +116,26 @@ public class FlyCamera : MonoBehaviour
      
     private Vector3 GetBaseInput() { //returns the basic values, if it's 0 than it's not active.
         Vector3 p_Velocity = new Vector3();
-        if (Input.GetKey (KeyCode.W)){
-            p_Velocity += new Vector3(0, 0 , 1);
-        }
-        if (Input.GetKey (KeyCode.S)){
-            p_Velocity += new Vector3(0, 0, -1);
-        }
-        if (Input.GetKey (KeyCode.A)){
-            p_Velocity += new Vector3(-1, 0, 0);
-        }
-        if (Input.GetKey (KeyCode.D)){
-            p_Velocity += new Vector3(1, 0, 0);
-        }
-        if (Input.GetKey (KeyCode.Q)){
-            p_Velocity += new Vector3(0, 1, 0);
-        }
-        if (Input.GetKey (KeyCode.E)){
-            p_Velocity += new Vector3(0, -1, 0);
+        if (permissionToMoveKey)
+        {
+            if (Input.GetKey (KeyCode.W)){
+                p_Velocity += new Vector3(0, 0 , 1);
+            }
+            if (Input.GetKey (KeyCode.S)){
+                p_Velocity += new Vector3(0, 0, -1);
+            }
+            if (Input.GetKey (KeyCode.A)){
+                p_Velocity += new Vector3(-1, 0, 0);
+            }
+            if (Input.GetKey (KeyCode.D)){
+                p_Velocity += new Vector3(1, 0, 0);
+            }
+            if (Input.GetKey (KeyCode.Q)){
+                p_Velocity += new Vector3(0, 1, 0);
+            }
+            if (Input.GetKey (KeyCode.E)){
+                p_Velocity += new Vector3(0, -1, 0);
+            }
         }
         return p_Velocity;
     }

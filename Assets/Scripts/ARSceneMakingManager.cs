@@ -124,7 +124,8 @@ public class ARSceneMakingManager : MonoBehaviour
     GameObject FirstRedFlag_2;
     GameObject SecondRedFlag_2;
 
-    public string WebServerIP = "http://192.168.110.33:8000";
+    //public string WebServerIP = "http://192.168.110.33:8000";
+    public string WebServerIP = "";
     public static string inputTextIP = "";
 
     private bool FlagRyvenServerConnect = false;
@@ -163,9 +164,9 @@ public class ARSceneMakingManager : MonoBehaviour
     }
 
     void Start()
-    {   
+    {
         Screen.fullScreen = true;
-        Application.targetFrameRate = 30; // ограничение в 30 fps
+        Application.targetFrameRate = 60; // ограничение в 60 fps
         RelativePath = Directory.GetCurrentDirectory();
         //QualitySettings.vSyncCount = 0; // попытка снизить нагрузку на GPU
         
@@ -176,25 +177,28 @@ public class ARSceneMakingManager : MonoBehaviour
     }
 
     void Update()
-    {        
-        if (Input.GetKey(KeyCode.R))
-        {
-            InstallRadarogram();
-        }
-
+    {
         if (FlagRyvenServerConnect)
         {
             InstallRadarogramFromWebServer();
         }
 
-        // плавное обнуление положения камеры по кнопке Alt
-        if (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt))
-            SmoothMove = true;
-        if ((transform.position - new Vector3(0,1,0)).y > 0.1f && SmoothMove == true)
-            transform.position = Vector3.Lerp(transform.position, new Vector3(0,1,0), 0.05f);
-        else
-            SmoothMove = false;
+        if (GameObject.Find("Main Camera").GetComponent<FlyCamera>().permissionToMoveKey) // для того, чтобы не нажимались R и Alt, когда открыто меню настроек
+        {
+            if (Input.GetKey(KeyCode.R))
+            {
+                InstallRadarogram();
+            }
 
+            // плавное обнуление положения камеры по кнопке Alt
+            if (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt))
+                SmoothMove = true;
+            if ((transform.position - new Vector3(0,1,0)).y > 0.1f && SmoothMove == true)
+                transform.position = Vector3.Lerp(transform.position, new Vector3(0,1,0), 0.05f);
+            else
+                SmoothMove = false;
+
+        }
 
         // try
         // {
@@ -1445,13 +1449,13 @@ public class ARSceneMakingManager : MonoBehaviour
 
     public void RadarogramDownloadButton()
     {
-        if(InputFieldRyvenIP.text != "") // если что-то ввели
+        if(GameObject.Find("Dropdown").GetComponent<DropDownMenu>().selectItem.text != "") // если что-то ввели
         {
-            WebServerIP = "http://"+InputFieldRyvenIP.text+":8000";
+            WebServerIP = "http://"+GameObject.Find("Dropdown").GetComponent<DropDownMenu>().selectItem.text+":8000";
         }
         else // если поле осталось пустое - IP по умолчанию
         {
-            WebServerIP = "http://192.168.110.33:8000";
+            //WebServerIP = "http://192.168.110.33:8000";
         }
         GameObject.Find("SettingsButton").GetComponent<TestButton>().testClickBut(); // закрываю окно settings
         InitWeb();
@@ -1502,13 +1506,13 @@ public class ARSceneMakingManager : MonoBehaviour
             File.Delete(RelativePath + "\\RyvenScene" + "\\scene.json");
         }
         
-        if(InputFieldRyvenIP.text != "") // если что-то ввели
+        if(GameObject.Find("Dropdown").GetComponent<DropDownMenu>().selectItem.text != "") // если что-то ввели
         {
-            WebServerIP = "http://"+InputFieldRyvenIP.text+":8000";
+            WebServerIP = "http://"+GameObject.Find("Dropdown").GetComponent<DropDownMenu>().selectItem.text+":8000";
         }
         else // если поле осталось пустое - IP по умолчанию
         {
-            WebServerIP = "http://192.168.110.33:8000";
+            //WebServerIP = "http://192.168.110.33:8000";
         }
         GameObject.Find("SettingsButton").GetComponent<TestButton>().testClickBut(); // закрываю окно settings
         StartCoroutine("LogCoroutine");
