@@ -1500,6 +1500,12 @@ public class ARSceneMakingManager : MonoBehaviour
 
     public void DownloadScene()
     {
+        bool toggleDestroyScene = GameObject.Find("ToggleDestroyScene").GetComponent<Toggle>().isOn; // true - если удаляем прошлую сцену, false - оставляем
+        if (toggleDestroyScene)
+        {
+            GameObject.Find("BasePlane(Clone)").GetComponent<DestroyScene>().DestroySceneButton(); // удаляем прошлую сцену
+        }
+
         // удаляем старый файл, если такой есть
         if(File.Exists(RelativePath + "\\RyvenScene" + "\\scene.json"))
         {

@@ -142,6 +142,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BasePlanePrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 8864470990037636271, guid: 9135ff122beb2eadcb1ca3f56b0378ac, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9001807543384068337, guid: 9135ff122beb2eadcb1ca3f56b0378ac, type: 3}
       propertyPath: m_RootOrder
       value: 0
