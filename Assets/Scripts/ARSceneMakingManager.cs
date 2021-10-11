@@ -194,7 +194,7 @@ public class ARSceneMakingManager : MonoBehaviour
             if (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt))
                 SmoothMove = true;
             if ((transform.position - new Vector3(0,1,0)).y > 0.1f && SmoothMove == true)
-                transform.position = Vector3.Lerp(transform.position, new Vector3(0,1,0), 0.05f);
+                transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, 1, transform.position.z), 0.05f);
             else
                 SmoothMove = false;
 

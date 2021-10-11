@@ -18,7 +18,8 @@ public class DropDownMenu : MonoBehaviour
     {
         dropdown.options.Clear();
 
-        if(File.Exists( Path.Combine(Directory.GetCurrentDirectory(), "Ryven_IP_list.json") ))
+        // if(File.Exists( Path.Combine(Directory.GetCurrentDirectory(), "Ryven_IP_list.json") )) // изменил с GetCurrentDirectory на Application.dataPath чтобы файл с IP был всегда в одном месте - в папке GeoSceneViewer_1_0_Data (GetCurrentDirectory даёт путь до папки где находится сцена, если используется сторонняя сцена)
+        if(File.Exists( Path.Combine(Application.dataPath, "Ryven_IP_list.json") ))
         {
             ip_saver = ip_saver.IPListLoadFromJson();
 

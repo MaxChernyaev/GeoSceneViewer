@@ -24,7 +24,7 @@ public class IPListSaver
     public void AddIPList(string MyKey, string MyValue)
     {
         // если раньше уже был файл с IP
-        if(File.Exists( Path.Combine(Directory.GetCurrentDirectory(), "Ryven_IP_list.json") ))
+        if(File.Exists( Path.Combine(Application.dataPath, "Ryven_IP_list.json") ))
         {
             IPDictionary.Clear(); // предварительно очищаем, чтобы не было конфликтов при нескольких сохранениях подряд
             IPList.Clear();
@@ -62,7 +62,7 @@ public class IPListSaver
     /// </summary>
     public void IPListSaveToJson()
     {        
-        using (FileStream fileStream = File.Open(Path.Combine(Directory.GetCurrentDirectory(), "Ryven_IP_list.json"), FileMode.OpenOrCreate, FileAccess.Write))
+        using (FileStream fileStream = File.Open(Path.Combine(Application.dataPath, "Ryven_IP_list.json"), FileMode.OpenOrCreate, FileAccess.Write))
         {
             fileStream.SetLength(0);
 
@@ -80,9 +80,9 @@ public class IPListSaver
     /// </summary>
     public IPListSaver IPListLoadFromJson()
     {
-        if(File.Exists( Path.Combine(Directory.GetCurrentDirectory(), "Ryven_IP_list.json") ))
+        if(File.Exists( Path.Combine(Application.dataPath, "Ryven_IP_list.json") ))
         {
-            using (FileStream fileStream = File.Open(Path.Combine(Directory.GetCurrentDirectory(), "Ryven_IP_list.json"), FileMode.Open, FileAccess.Read))
+            using (FileStream fileStream = File.Open(Path.Combine(Application.dataPath, "Ryven_IP_list.json"), FileMode.Open, FileAccess.Read))
             using (StreamReader reader = new StreamReader(fileStream))
             {
                 IPListSaver IPListSaverObj = JsonUtility.FromJson<IPListSaver>(reader.ReadToEnd());
