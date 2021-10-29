@@ -22,6 +22,9 @@ public class ARSceneMakingManager : MonoBehaviour
     [SerializeField] private Text Obj2Distance;
     [SerializeField] private GameObject IntersectionObj;
     [SerializeField] private Text InputFieldRyvenIP;
+    [SerializeField] private InputField StartRadarogramOffset;
+    private int currentPositionStartRadarogram = 0; // текущее положение старта радарограммы
+    private int StartRadarogramOffsetINT = 0; // смещение старта радарограммы
 
     //[SerializeField] private ObjectManager ObjectManagerScript;
     WebClient webClient = new WebClient();
@@ -32,79 +35,15 @@ public class ARSceneMakingManager : MonoBehaviour
     // private int WhiteFlagNum2 = 0;
     // private int WhiteFlagNum3 = 0;
     // private int WhiteFlagNum4 = 0;
-
-    GameObject FirstObg_1;
-    Vector3 FirstPosition_1;
-    GameObject SecondObg_1;
-    Vector3 SecondPosition_1;
-    GameObject FirstObg_2;
-    Vector3 FirstPosition_2;
-    GameObject SecondObg_2;
-    Vector3 SecondPosition_2;
-    GameObject FirstObg_3;
-    Vector3 FirstPosition_3;
-    GameObject SecondObg_3;
-    Vector3 SecondPosition_3;
-    GameObject FirstObg_4;
-    Vector3 FirstPosition_4;
-    GameObject SecondObg_4;
-    Vector3 SecondPosition_4;
-    GameObject FirstObg_5;
-    Vector3 FirstPosition_5;
-    GameObject SecondObg_5;
-    Vector3 SecondPosition_5;
-    GameObject FirstObg_6;
-    Vector3 FirstPosition_6;
-    GameObject SecondObg_6;
-    Vector3 SecondPosition_6;
-    GameObject FirstObg_7;
-    Vector3 FirstPosition_7;
-    GameObject SecondObg_7;
-    Vector3 SecondPosition_7;
-    GameObject FirstObg_8;
-    Vector3 FirstPosition_8;
-    GameObject SecondObg_8;
-    Vector3 SecondPosition_8;
-    GameObject FirstObg_9;
-    Vector3 FirstPosition_9;
-    GameObject SecondObg_9;
-    Vector3 SecondPosition_9;
-    GameObject FirstObg_10;
-    Vector3 FirstPosition_10;
-    GameObject SecondObg_10;
-    Vector3 SecondPosition_10;
-    GameObject RG_1;
-    GameObject RG_2;
-    GameObject RG_3;
-    GameObject RG_4;
-    GameObject RG_5;
-    GameObject RG_6;
-    GameObject RG_7;
-    GameObject RG_8;
-    GameObject RG_9;
-    GameObject RG_10;
-    Vector3 normalizedDirection_1;
-    Vector3 normalizedDirection_2;
-    Vector3 normalizedDirection_3;
-    Vector3 normalizedDirection_4;
-    Vector3 normalizedDirection_5;
-    Vector3 normalizedDirection_6;
-    Vector3 normalizedDirection_7;
-    Vector3 normalizedDirection_8;
-    Vector3 normalizedDirection_9;
-    Vector3 normalizedDirection_10;
-    Vector3 MyCenter_1;
-    Vector3 MyCenter_2;
-    Vector3 MyCenter_3;
-    Vector3 MyCenter_4;
-    Vector3 MyCenter_5;
-    Vector3 MyCenter_6;
-    Vector3 MyCenter_7;
-    Vector3 MyCenter_8;
-    Vector3 MyCenter_9;
-    Vector3 MyCenter_10;
+    GameObject FirstObg_1, FirstObg_2, FirstObg_3, FirstObg_4, FirstObg_5, FirstObg_6, FirstObg_7, FirstObg_8, FirstObg_9, FirstObg_10;
+    Vector3 FirstPosition_1, FirstPosition_2, FirstPosition_3, FirstPosition_4, FirstPosition_5, FirstPosition_6, FirstPosition_7, FirstPosition_8, FirstPosition_9, FirstPosition_10;
+    GameObject SecondObg_1, SecondObg_2, SecondObg_3, SecondObg_4, SecondObg_5, SecondObg_6, SecondObg_7, SecondObg_8, SecondObg_9, SecondObg_10;
+    Vector3 SecondPosition_1, SecondPosition_2, SecondPosition_3, SecondPosition_4, SecondPosition_5, SecondPosition_6, SecondPosition_7, SecondPosition_8, SecondPosition_9, SecondPosition_10;
+    GameObject RG_1, RG_2, RG_3, RG_4, RG_5, RG_6, RG_7, RG_8, RG_9, RG_10;
+    Vector3 normalizedDirection_1, normalizedDirection_2, normalizedDirection_3, normalizedDirection_4, normalizedDirection_5, normalizedDirection_6, normalizedDirection_7, normalizedDirection_8, normalizedDirection_9, normalizedDirection_10;
+    Vector3 MyCenter_1, MyCenter_2, MyCenter_3, MyCenter_4, MyCenter_5, MyCenter_6, MyCenter_7, MyCenter_8, MyCenter_9, MyCenter_10;
     int testNUM;
-
+    
     public string RadarogramPath;
 
     float x1,y1,x2,y2,x3,y3,x4,y4,x5,y5,x6,y6;
@@ -183,15 +122,15 @@ public class ARSceneMakingManager : MonoBehaviour
             InstallRadarogramFromWebServer();
         }
 
-        if (GameObject.Find("Main Camera").GetComponent<FlyCamera>().permissionToMoveKey) // для того, чтобы не нажимались R и Alt, когда открыто меню настроек
+        if (GameObject.Find("Main Camera").GetComponent<FlyCamera>().permissionToMoveKey) // для того, чтобы не нажимались R и X, когда открыто меню настроек
         {
             if (Input.GetKey(KeyCode.R))
             {
                 InstallRadarogram();
             }
 
-            // плавное обнуление положения камеры по кнопке Alt
-            if (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt))
+            // плавное обнуление положения камеры по кнопке X
+            if (Input.GetKey(KeyCode.X))
                 SmoothMove = true;
             if ((transform.position - new Vector3(0,1,0)).y > 0.1f && SmoothMove == true)
                 transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, 1, transform.position.z), 0.05f);
@@ -408,9 +347,20 @@ public class ARSceneMakingManager : MonoBehaviour
 
 
             }
-            else if (go.name == "BasePlane(Clone)")
+            else if (go.name == "BasePlane_main")
             {
                 FindPlane = go;
+                
+                // GameObject[] childObjects = new GameObject[FindPlane.transform.childCount];
+                // for (int i = 0; i < FindPlane.transform.childCount; i++)
+                // {
+                //     Transform tr = FindPlane.transform.GetChild(i);
+                //     childObjects[i] = tr.gameObject;
+                // }
+                // for (int i = 0; i < childObjects.Length; i++)
+                // {
+                //     Debug.Log(i.ToString() +": "+ childObjects[i].name);
+                // }
             }
         }
     }
@@ -617,6 +567,7 @@ public class ARSceneMakingManager : MonoBehaviour
                     {
                         if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\9.png") && (myJsonRadarogramData.images.jpg9[0] != 0))
                         {
+                            FirstPosition_10 = FirstPosition_10 + (normalizedDirection_10 * StartRadarogramOffsetINT); // если был введен оффсет - радарограмма сдвигается. (по дефолту offset = 0)
                             SecondPosition_10 = FirstPosition_10 + (normalizedDirection_10 * myJsonRadarogramData.images.jpg9[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                             SecondObg_10.transform.position = SecondPosition_10; // отодвигаем второй белый флаг, чтобы влезла радарограмма
                             MyCenter_10 = Vector3.Lerp(FirstPosition_10, SecondPosition_10, 0.5f);
@@ -635,6 +586,7 @@ public class ARSceneMakingManager : MonoBehaviour
                     {
                         if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\8.png") && (myJsonRadarogramData.images.jpg8[0] != 0))
                         {
+                            FirstPosition_9 = FirstPosition_9 + (normalizedDirection_9 * StartRadarogramOffsetINT); // если был введен оффсет - радарограмма сдвигается. (по дефолту offset = 0)
                             SecondPosition_9 = FirstPosition_9 + (normalizedDirection_9 * myJsonRadarogramData.images.jpg8[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                             SecondObg_9.transform.position = SecondPosition_9; // отодвигаем второй белый флаг, чтобы влезла радарограмма
                             MyCenter_9 = Vector3.Lerp(FirstPosition_9, SecondPosition_9, 0.5f);
@@ -653,6 +605,7 @@ public class ARSceneMakingManager : MonoBehaviour
                     {
                         if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\7.png") && (myJsonRadarogramData.images.jpg7[0] != 0))
                         {
+                            FirstPosition_8 = FirstPosition_8 + (normalizedDirection_8 * StartRadarogramOffsetINT); // если был введен оффсет - радарограмма сдвигается. (по дефолту offset = 0)
                             SecondPosition_8 = FirstPosition_8 + (normalizedDirection_8 * myJsonRadarogramData.images.jpg7[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                             SecondObg_8.transform.position = SecondPosition_8; // отодвигаем второй белый флаг, чтобы влезла радарограмма
                             MyCenter_8 = Vector3.Lerp(FirstPosition_8, SecondPosition_8, 0.5f);
@@ -671,6 +624,7 @@ public class ARSceneMakingManager : MonoBehaviour
                     {
                         if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\6.png") && (myJsonRadarogramData.images.jpg6[0] != 0))
                         {
+                            FirstPosition_7 = FirstPosition_7 + (normalizedDirection_7 * StartRadarogramOffsetINT); // если был введен оффсет - радарограмма сдвигается. (по дефолту offset = 0)
                             SecondPosition_7 = FirstPosition_7 + (normalizedDirection_7 * myJsonRadarogramData.images.jpg6[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                             SecondObg_7.transform.position = SecondPosition_7; // отодвигаем второй белый флаг, чтобы влезла радарограмма
                             MyCenter_7 = Vector3.Lerp(FirstPosition_7, SecondPosition_7, 0.5f);
@@ -689,6 +643,7 @@ public class ARSceneMakingManager : MonoBehaviour
                     {
                         if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\5.png") && (myJsonRadarogramData.images.jpg5[0] != 0))
                         {
+                            FirstPosition_6 = FirstPosition_6 + (normalizedDirection_6 * StartRadarogramOffsetINT); // если был введен оффсет - радарограмма сдвигается. (по дефолту offset = 0)
                             SecondPosition_6 = FirstPosition_6 + (normalizedDirection_6 * myJsonRadarogramData.images.jpg5[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                             SecondObg_6.transform.position = SecondPosition_6; // отодвигаем второй белый флаг, чтобы влезла радарограмма
                             MyCenter_6 = Vector3.Lerp(FirstPosition_6, SecondPosition_6, 0.5f);
@@ -707,6 +662,7 @@ public class ARSceneMakingManager : MonoBehaviour
                     {
                         if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\4.png") && (myJsonRadarogramData.images.jpg4[0] != 0))
                         {
+                            FirstPosition_5 = FirstPosition_5 + (normalizedDirection_5 * StartRadarogramOffsetINT); // если был введен оффсет - радарограмма сдвигается. (по дефолту offset = 0)
                             SecondPosition_5 = FirstPosition_5 + (normalizedDirection_5 * myJsonRadarogramData.images.jpg4[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                             SecondObg_5.transform.position = SecondPosition_5; // отодвигаем второй белый флаг, чтобы влезла радарограмма
                             MyCenter_5 = Vector3.Lerp(FirstPosition_5, SecondPosition_5, 0.5f);
@@ -725,6 +681,7 @@ public class ARSceneMakingManager : MonoBehaviour
                     {
                         if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\3.png") && (myJsonRadarogramData.images.jpg3[0] != 0))
                         {
+                            FirstPosition_4 = FirstPosition_4 + (normalizedDirection_4 * StartRadarogramOffsetINT); // если был введен оффсет - радарограмма сдвигается. (по дефолту offset = 0)
                             SecondPosition_4 = FirstPosition_4 + (normalizedDirection_4 * myJsonRadarogramData.images.jpg3[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                             SecondObg_4.transform.position = SecondPosition_4; // отодвигаем второй белый флаг, чтобы влезла радарограмма
                             MyCenter_4 = Vector3.Lerp(FirstPosition_4, SecondPosition_4, 0.5f);
@@ -743,6 +700,7 @@ public class ARSceneMakingManager : MonoBehaviour
                     {
                         if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\2.png") && (myJsonRadarogramData.images.jpg2[0] != 0))
                         {
+                            FirstPosition_3 = FirstPosition_3 + (normalizedDirection_3 * StartRadarogramOffsetINT); // если был введен оффсет - радарограмма сдвигается. (по дефолту offset = 0)
                             SecondPosition_3 = FirstPosition_3 + (normalizedDirection_3 * myJsonRadarogramData.images.jpg2[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                             SecondObg_3.transform.position = SecondPosition_3; // отодвигаем второй белый флаг, чтобы влезла радарограмма
                             MyCenter_3 = Vector3.Lerp(FirstPosition_3, SecondPosition_3, 0.5f);
@@ -761,6 +719,7 @@ public class ARSceneMakingManager : MonoBehaviour
                     {
                         if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\1.png") && (myJsonRadarogramData.images.jpg1[0] != 0))
                         {
+                            FirstPosition_2 = FirstPosition_2 + (normalizedDirection_2 * StartRadarogramOffsetINT); // если был введен оффсет - радарограмма сдвигается. (по дефолту offset = 0)
                             SecondPosition_2 = FirstPosition_2 + (normalizedDirection_2 * myJsonRadarogramData.images.jpg1[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                             SecondObg_2.transform.position = SecondPosition_2; // отодвигаем второй белый флаг, чтобы влезла радарограмма
                             MyCenter_2 = Vector3.Lerp(FirstPosition_2, SecondPosition_2, 0.5f);
@@ -779,6 +738,7 @@ public class ARSceneMakingManager : MonoBehaviour
                     {
                         if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\0.png") && (myJsonRadarogramData.images.jpg0[0] != 0))
                         {
+                            FirstPosition_1 = FirstPosition_1 + (normalizedDirection_1 * StartRadarogramOffsetINT); // если был введен оффсет - радарограмма сдвигается. (по дефолту offset = 0)
                             SecondPosition_1 = FirstPosition_1 + (normalizedDirection_1 * myJsonRadarogramData.images.jpg0[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                             SecondObg_1.transform.position = SecondPosition_1; // отодвигаем второй белый флаг, чтобы влезла радарограмма
                             MyCenter_1 = Vector3.Lerp(FirstPosition_1, SecondPosition_1, 0.5f);
@@ -808,6 +768,8 @@ public class ARSceneMakingManager : MonoBehaviour
             {
                 if(File.Exists(RelativePath + "\\Radarograms" + "\\9.png") && (myJsonRadarogramData.images.jpg9[0] != 0))
                 {
+                    // if (StartRadarogramOffset.text != "")
+                    //     FirstPosition_10 = FirstPosition_10 + (normalizedDirection_10 * Int32.Parse(StartRadarogramOffset.text));
                     SecondPosition_10 = FirstPosition_10 + (normalizedDirection_10 * myJsonRadarogramData.images.jpg9[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                     SecondObg_10.transform.position = SecondPosition_10; // отодвигаем второй белый флаг, чтобы влезла радарограмма
                     MyCenter_10 = Vector3.Lerp(FirstPosition_10, SecondPosition_10, 0.5f);
@@ -829,6 +791,8 @@ public class ARSceneMakingManager : MonoBehaviour
                 }
                 else if(File.Exists(RelativePath + "\\Radarograms" + "\\9.jpg") && (myJsonRadarogramData.images.jpg9[0] != 0))
                 {
+                    // if (StartRadarogramOffset.text != "")
+                    //     FirstPosition_10 = FirstPosition_10 + (normalizedDirection_10 * Int32.Parse(StartRadarogramOffset.text));
                     SecondPosition_10 = FirstPosition_10 + (normalizedDirection_10 * myJsonRadarogramData.images.jpg9[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                     SecondObg_10.transform.position = SecondPosition_10; // отодвигаем второй белый флаг, чтобы влезла радарограмма
                     MyCenter_10 = Vector3.Lerp(FirstPosition_10, SecondPosition_10, 0.5f);
@@ -858,6 +822,8 @@ public class ARSceneMakingManager : MonoBehaviour
             {
                 if(File.Exists(RelativePath + "\\Radarograms" + "\\8.png") && (myJsonRadarogramData.images.jpg8[0] != 0))
                 {
+                    // if (StartRadarogramOffset.text != "")
+                    //     FirstPosition_9 = FirstPosition_9 + (normalizedDirection_9 * Int32.Parse(StartRadarogramOffset.text));
                     SecondPosition_9 = FirstPosition_9 + (normalizedDirection_9 * myJsonRadarogramData.images.jpg8[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                     SecondObg_9.transform.position = SecondPosition_9; // отодвигаем второй белый флаг, чтобы влезла радарограмма
                     MyCenter_9 = Vector3.Lerp(FirstPosition_9, SecondPosition_9, 0.5f);
@@ -879,6 +845,8 @@ public class ARSceneMakingManager : MonoBehaviour
                 }
                 else if(File.Exists(RelativePath + "\\Radarograms" + "\\8.jpg") && (myJsonRadarogramData.images.jpg8[0] != 0))
                 {
+                    // if (StartRadarogramOffset.text != "")
+                    //     FirstPosition_9 = FirstPosition_9 + (normalizedDirection_9 * Int32.Parse(StartRadarogramOffset.text));
                     SecondPosition_9 = FirstPosition_9 + (normalizedDirection_9 * myJsonRadarogramData.images.jpg8[0]/100); // умножается на количество метров (длина радарограммы). Делю на 100, потому что сейчас 100 пикселей на метр
                     SecondObg_9.transform.position = SecondPosition_9; // отодвигаем второй белый флаг, чтобы влезла радарограмма
                     MyCenter_9 = Vector3.Lerp(FirstPosition_9, SecondPosition_9, 0.5f);
@@ -1449,6 +1417,25 @@ public class ARSceneMakingManager : MonoBehaviour
 
     public void RadarogramDownloadButton()
     {
+        if (StartRadarogramOffset.text != "") // если оффсет ввели
+        {
+            // от нового отнимаем текущий - получаем на сколько нужно сдвинуть от текущего положения
+            StartRadarogramOffsetINT = (Int32.Parse(StartRadarogramOffset.text) - currentPositionStartRadarogram); // на сколько сдвинуть
+            currentPositionStartRadarogram = Int32.Parse(StartRadarogramOffset.text); // запоминаем введенное число как текущее положение
+        }
+        else
+        {
+            // пустое поле приравнивается к введенному нулю
+            StartRadarogramOffsetINT = 0 - currentPositionStartRadarogram;
+            currentPositionStartRadarogram = 0; // запоминаем введенное число как текущее положение
+        }
+
+        if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\data.json"))
+        {
+            // DATA.JSON найден!
+            lastTime = 0; // меняю прошлое время, чтобы радарограммы точно изменили своё положение
+        }
+        
         if(GameObject.Find("Dropdown").GetComponent<DropDownMenu>().selectItem.text != "") // если что-то ввели
         {
             WebServerIP = "http://"+GameObject.Find("Dropdown").GetComponent<DropDownMenu>().selectItem.text+":8000";
@@ -1486,15 +1473,15 @@ public class ARSceneMakingManager : MonoBehaviour
     IEnumerator LogCoroutine()
     {
         TextLog.text = "Подключаюсь по IP: " + WebServerIP.ToString() + ".";
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(0.5f);
         TextLog.text = "Подключаюсь по IP: " + WebServerIP.ToString() + "..";
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(0.5f);
         TextLog.text = "Подключаюсь по IP: " + WebServerIP.ToString() + "...";
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(0.5f);
         TextLog.text = "Подключаюсь по IP: " + WebServerIP.ToString() + "....";
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(0.5f);
         TextLog.text = "Подключаюсь по IP: " + WebServerIP.ToString() + ".....";
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(0.5f);
         TextLog.text = " ";
     }
 
@@ -1503,7 +1490,7 @@ public class ARSceneMakingManager : MonoBehaviour
         bool toggleDestroyScene = GameObject.Find("ToggleDestroyScene").GetComponent<Toggle>().isOn; // true - если удаляем прошлую сцену, false - оставляем
         if (toggleDestroyScene)
         {
-            GameObject.Find("BasePlane(Clone)").GetComponent<DestroyScene>().DestroySceneButton(); // удаляем прошлую сцену
+            GameObject.Find("BasePlane_main").GetComponent<DestroyScene>().DestroySceneButton(); // удаляем прошлую сцену
         }
 
         // удаляем старый файл, если такой есть

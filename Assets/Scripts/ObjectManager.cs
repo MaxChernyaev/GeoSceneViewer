@@ -103,7 +103,7 @@ public class ObjectManager : MonoBehaviour
         }
 
         //CommonSaveData commonSaveData = _saver.Load();
-        FindObject = GameObject.Find("BasePlane(Clone)");
+        FindObject = GameObject.Find("BasePlane_main");
 
         if (commonSaveData == null)
         {
