@@ -149,11 +149,12 @@ public class KeyboardController : MonoBehaviour
                 }
             }
 
-            // показывать в порядке убывания
+            // показывать в порядке убывания (поменял на порядок возрастания)
             if (Input.GetKeyDown(KeyCode.Equals)||Input.GetKeyDown(KeyCode.KeypadPlus))
             {
                 if(RadarogramWereFound == false) FindRadarogram();
-                for(int i = 10; i > 0; i--)
+                // for(int i = 10; i > 0; i--)
+                for(int i = 1; i < 11; i++)
                 {
                     if(RGArray[i] != null) //если такая радарограмма вообще существует
                     {
@@ -167,11 +168,12 @@ public class KeyboardController : MonoBehaviour
                 }
             }
 
-            // скрыть в порядке возрастания
+            // скрыть в порядке возрастания (поменял на порядок убывания)
             if (Input.GetKeyDown(KeyCode.Minus)||Input.GetKeyDown(KeyCode.KeypadMinus))
             {
                 if(RadarogramWereFound == false) FindRadarogram();
-                for(int i = 1; i < 11; i++)
+                // for(int i = 1; i < 11; i++)
+                for(int i = 10; i > 0; i--)
                 {
                     if(RGArray[i] != null) //если такая радарограмма вообще существует
                     {

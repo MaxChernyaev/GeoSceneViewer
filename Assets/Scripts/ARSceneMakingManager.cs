@@ -17,7 +17,7 @@ public class ARSceneMakingManager : MonoBehaviour
 
     [SerializeField] private GameObject CatObj;
     [SerializeField] private GameObject TestText;
-    [SerializeField] private Text TextLog;
+    [SerializeField] public Text TextLog;
     [SerializeField] private Text Obj1Distance;
     [SerializeField] private Text Obj2Distance;
     [SerializeField] private GameObject IntersectionObj;
@@ -28,7 +28,7 @@ public class ARSceneMakingManager : MonoBehaviour
 
     //[SerializeField] private ObjectManager ObjectManagerScript;
     WebClient webClient = new WebClient();
-    JsonRadarogramReader.CommonData myJsonRadarogramData;
+    public JsonRadarogramReader.CommonData myJsonRadarogramData;
     private double lastTime;
 
     // private int WhiteFlagNum1 = 0;
@@ -126,7 +126,7 @@ public class ARSceneMakingManager : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.R))
             {
-                InstallRadarogram();
+                InstallRadarogram();                
             }
 
             // плавное обнуление положения камеры по кнопке X
@@ -176,6 +176,7 @@ public class ARSceneMakingManager : MonoBehaviour
     
     public void InstallRadarogram()
     {
+        GameObject.Find("Paint").GetComponent<PaintingOnRadarograms>().ColliderList_clear(); // очищаю списки коллайдеров и текстур(нарисованных пользователем, при загрузке новых радарограмм. Чтобы рисовать на них по новой)
         RadarogramPath = "\\Radarograms\\data.json";
         if (firstInstall == true)
         {
@@ -510,7 +511,7 @@ public class ARSceneMakingManager : MonoBehaviour
             //frames = 0;
             if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\data.json"))
             {
-                    lastTime = myJsonRadarogramData.time;            // запоминаю какое время было в прошлом data.json файле
+                lastTime = myJsonRadarogramData.time;            // запоминаю какое время было в прошлом data.json файле
             }
             try
             {
@@ -573,8 +574,9 @@ public class ARSceneMakingManager : MonoBehaviour
                             MyCenter_10 = Vector3.Lerp(FirstPosition_10, SecondPosition_10, 0.5f);
                             RG_10.transform.position = MyCenter_10;
                             RG_10.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\9.png");
-                            RG_10.transform.position += new Vector3(0, 1.5f, 0);
+                            RG_10.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg9[1]/200f, 0);
                             RG_10.name = "radarogramPrefab_10";
+                            SettingForPainting(RG_10, myJsonRadarogramData.images.jpg9, 18, 19);
                         }
                         else
                         {
@@ -592,8 +594,9 @@ public class ARSceneMakingManager : MonoBehaviour
                             MyCenter_9 = Vector3.Lerp(FirstPosition_9, SecondPosition_9, 0.5f);
                             RG_9.transform.position = MyCenter_9;
                             RG_9.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\8.png");
-                            RG_9.transform.position += new Vector3(0, 1.5f, 0);
+                            RG_9.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg8[1]/200f, 0);
                             RG_9.name = "radarogramPrefab_9";
+                            SettingForPainting(RG_9, myJsonRadarogramData.images.jpg8, 16, 17);
                         }
                         else
                         {
@@ -611,8 +614,9 @@ public class ARSceneMakingManager : MonoBehaviour
                             MyCenter_8 = Vector3.Lerp(FirstPosition_8, SecondPosition_8, 0.5f);
                             RG_8.transform.position = MyCenter_8;
                             RG_8.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\7.png");
-                            RG_8.transform.position += new Vector3(0, 1.5f, 0);
+                            RG_8.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg7[1]/200f, 0);
                             RG_8.name = "radarogramPrefab_8";
+                            SettingForPainting(RG_8, myJsonRadarogramData.images.jpg7, 14, 15);
                         }
                         else
                         {
@@ -630,8 +634,9 @@ public class ARSceneMakingManager : MonoBehaviour
                             MyCenter_7 = Vector3.Lerp(FirstPosition_7, SecondPosition_7, 0.5f);
                             RG_7.transform.position = MyCenter_7;
                             RG_7.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\6.png");
-                            RG_7.transform.position += new Vector3(0, 1.5f, 0);
+                            RG_7.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg6[1]/200f, 0);
                             RG_7.name = "radarogramPrefab_7";
+                            SettingForPainting(RG_7, myJsonRadarogramData.images.jpg6, 12, 13);
                         }
                         else
                         {
@@ -649,8 +654,9 @@ public class ARSceneMakingManager : MonoBehaviour
                             MyCenter_6 = Vector3.Lerp(FirstPosition_6, SecondPosition_6, 0.5f);
                             RG_6.transform.position = MyCenter_6;
                             RG_6.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\5.png");
-                            RG_6.transform.position += new Vector3(0, 1.5f, 0);
+                            RG_6.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg5[1]/200f, 0);
                             RG_6.name = "radarogramPrefab_6";
+                            SettingForPainting(RG_6, myJsonRadarogramData.images.jpg5, 10, 11);
                         }
                         else
                         {
@@ -668,8 +674,9 @@ public class ARSceneMakingManager : MonoBehaviour
                             MyCenter_5 = Vector3.Lerp(FirstPosition_5, SecondPosition_5, 0.5f);
                             RG_5.transform.position = MyCenter_5;
                             RG_5.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\4.png");
-                            RG_5.transform.position += new Vector3(0, 1.5f, 0);
+                            RG_5.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg4[1]/200f, 0);
                             RG_5.name = "radarogramPrefab_5";
+                            SettingForPainting(RG_5, myJsonRadarogramData.images.jpg4, 8, 9);
                         }
                         else
                         {
@@ -687,8 +694,9 @@ public class ARSceneMakingManager : MonoBehaviour
                             MyCenter_4 = Vector3.Lerp(FirstPosition_4, SecondPosition_4, 0.5f);
                             RG_4.transform.position = MyCenter_4;
                             RG_4.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\3.png");
-                            RG_4.transform.position += new Vector3(0, 1.5f, 0);
+                            RG_4.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg3[1]/200f, 0);
                             RG_4.name = "radarogramPrefab_4";
+                            SettingForPainting(RG_4, myJsonRadarogramData.images.jpg3, 6, 7);
                         }
                         else
                         {
@@ -706,8 +714,9 @@ public class ARSceneMakingManager : MonoBehaviour
                             MyCenter_3 = Vector3.Lerp(FirstPosition_3, SecondPosition_3, 0.5f);
                             RG_3.transform.position = MyCenter_3;
                             RG_3.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\2.png");
-                            RG_3.transform.position += new Vector3(0, 1.5f, 0);
+                            RG_3.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg2[1]/200f, 0);
                             RG_3.name = "radarogramPrefab_3";
+                            SettingForPainting(RG_3, myJsonRadarogramData.images.jpg2, 4, 5);
                         }
                         else
                         {
@@ -725,8 +734,9 @@ public class ARSceneMakingManager : MonoBehaviour
                             MyCenter_2 = Vector3.Lerp(FirstPosition_2, SecondPosition_2, 0.5f);
                             RG_2.transform.position = MyCenter_2;
                             RG_2.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\1.png");
-                            RG_2.transform.position += new Vector3(0, 1.5f, 0);
+                            RG_2.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg1[1]/200f, 0);
                             RG_2.name = "radarogramPrefab_2";
+                            SettingForPainting(RG_2, myJsonRadarogramData.images.jpg1, 2, 3);
                         }
                         else
                         {
@@ -744,8 +754,9 @@ public class ARSceneMakingManager : MonoBehaviour
                             MyCenter_1 = Vector3.Lerp(FirstPosition_1, SecondPosition_1, 0.5f);
                             RG_1.transform.position = MyCenter_1;
                             RG_1.GetComponent<SpriteRenderer>().sprite = LoadSprite(RelativePath + "\\RyvenRadarograms" + "\\0.png");
-                            RG_1.transform.position += new Vector3(0, 1.5f, 0);
+                            RG_1.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg0[1]/200f, 0);
                             RG_1.name = "radarogramPrefab_1";
+                            SettingForPainting(RG_1, myJsonRadarogramData.images.jpg0, 0, 1);
                         }
                         else
                         {
@@ -786,8 +797,10 @@ public class ARSceneMakingManager : MonoBehaviour
                     // }
 
                     //RG_10.transform.Find("Number").GetComponent<TextMesh>().text = RG_10.GetComponent<SpriteRenderer>().sortingOrder.ToString();
-                    RG_10.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_10.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg9[1]/200f, 0);
                     RG_10.name = "radarogramPrefab_10";
+
+                    SettingForPainting(RG_10, myJsonRadarogramData.images.jpg9, 18, 19);
                 }
                 else if(File.Exists(RelativePath + "\\Radarograms" + "\\9.jpg") && (myJsonRadarogramData.images.jpg9[0] != 0))
                 {
@@ -809,8 +822,10 @@ public class ARSceneMakingManager : MonoBehaviour
                     // }
 
                     //RG_10.transform.Find("Number").GetComponent<TextMesh>().text = RG_10.GetComponent<SpriteRenderer>().sortingOrder.ToString();
-                    RG_10.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_10.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg9[1]/200f, 0);
                     RG_10.name = "radarogramPrefab_10";
+
+                    SettingForPainting(RG_10, myJsonRadarogramData.images.jpg9, 18, 19);
                 }
                 else
                 {
@@ -840,8 +855,10 @@ public class ARSceneMakingManager : MonoBehaviour
                     // }
 
                     //RG_9.transform.Find("Number").GetComponent<TextMesh>().text = RG_9.GetComponent<SpriteRenderer>().sortingOrder.ToString();
-                    RG_9.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_9.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg8[1]/200f, 0);
                     RG_9.name = "radarogramPrefab_9";
+
+                    SettingForPainting(RG_9, myJsonRadarogramData.images.jpg8, 16, 17);
                 }
                 else if(File.Exists(RelativePath + "\\Radarograms" + "\\8.jpg") && (myJsonRadarogramData.images.jpg8[0] != 0))
                 {
@@ -863,8 +880,10 @@ public class ARSceneMakingManager : MonoBehaviour
                     // }
 
                     //RG_9.transform.Find("Number").GetComponent<TextMesh>().text = RG_9.GetComponent<SpriteRenderer>().sortingOrder.ToString();
-                    RG_9.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_9.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg8[1]/200f, 0);
                     RG_9.name = "radarogramPrefab_9";
+
+                    SettingForPainting(RG_9, myJsonRadarogramData.images.jpg8, 16, 17);
                 }
                 else
                 {
@@ -892,8 +911,10 @@ public class ARSceneMakingManager : MonoBehaviour
                     // }
 
                     //RG_8.transform.Find("Number").GetComponent<TextMesh>().text = RG_8.GetComponent<SpriteRenderer>().sortingOrder.ToString();
-                    RG_8.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_8.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg7[1]/200f, 0);
                     RG_8.name = "radarogramPrefab_8";
+
+                    SettingForPainting(RG_8, myJsonRadarogramData.images.jpg7, 14, 15);
                 }
                 else if(File.Exists(RelativePath + "\\Radarograms" + "\\7.jpg") && (myJsonRadarogramData.images.jpg7[0] != 0))
                 {
@@ -913,8 +934,10 @@ public class ARSceneMakingManager : MonoBehaviour
                     // }
 
                     //RG_8.transform.Find("Number").GetComponent<TextMesh>().text = RG_8.GetComponent<SpriteRenderer>().sortingOrder.ToString();
-                    RG_8.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_8.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg7[1]/200f, 0);
                     RG_8.name = "radarogramPrefab_8";
+
+                    SettingForPainting(RG_8, myJsonRadarogramData.images.jpg7, 14, 15);
                 }
                 else
                 {
@@ -942,8 +965,10 @@ public class ARSceneMakingManager : MonoBehaviour
                     // }
 
                     //RG_7.transform.Find("Number").GetComponent<TextMesh>().text = RG_7.GetComponent<SpriteRenderer>().sortingOrder.ToString();
-                    RG_7.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_7.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg6[1]/200f, 0);
                     RG_7.name = "radarogramPrefab_7";
+
+                    SettingForPainting(RG_7, myJsonRadarogramData.images.jpg6, 12, 13);
                 }
                 else if(File.Exists(RelativePath + "\\Radarograms" + "\\6.jpg") && (myJsonRadarogramData.images.jpg6[0] != 0))
                 {
@@ -963,8 +988,10 @@ public class ARSceneMakingManager : MonoBehaviour
                     // }
 
                     //RG_7.transform.Find("Number").GetComponent<TextMesh>().text = RG_7.GetComponent<SpriteRenderer>().sortingOrder.ToString();
-                    RG_7.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_7.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg6[1]/200f, 0);
                     RG_7.name = "radarogramPrefab_7";
+
+                    SettingForPainting(RG_7, myJsonRadarogramData.images.jpg6, 12, 13);
                 }
                 else
                 {
@@ -992,8 +1019,10 @@ public class ARSceneMakingManager : MonoBehaviour
                     // }
 
                     //RG_6.transform.Find("Number").GetComponent<TextMesh>().text = RG_6.GetComponent<SpriteRenderer>().sortingOrder.ToString();
-                    RG_6.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_6.transform.position += new Vector3(0,(float)myJsonRadarogramData.images.jpg5[1]/200f, 0);
                     RG_6.name = "radarogramPrefab_6";
+
+                    SettingForPainting(RG_6, myJsonRadarogramData.images.jpg5, 10, 11);
                 }
                 else if(File.Exists(RelativePath + "\\Radarograms" + "\\5.jpg") && (myJsonRadarogramData.images.jpg5[0] != 0))
                 {
@@ -1013,8 +1042,10 @@ public class ARSceneMakingManager : MonoBehaviour
                     // }
 
                     //RG_6.transform.Find("Number").GetComponent<TextMesh>().text = RG_6.GetComponent<SpriteRenderer>().sortingOrder.ToString();
-                    RG_6.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_6.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg5[1]/200f, 0);
                     RG_6.name = "radarogramPrefab_6";
+
+                    SettingForPainting(RG_6, myJsonRadarogramData.images.jpg5, 10, 11);
                 }
                 else
                 {
@@ -1042,8 +1073,10 @@ public class ARSceneMakingManager : MonoBehaviour
                     // }
 
                     //RG_5.transform.Find("Number").GetComponent<TextMesh>().text = RG_5.GetComponent<SpriteRenderer>().sortingOrder.ToString();
-                    RG_5.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_5.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg4[1]/200f, 0);
                     RG_5.name = "radarogramPrefab_5";
+
+                    SettingForPainting(RG_5, myJsonRadarogramData.images.jpg4, 8, 9);
                 }
                 else if(File.Exists(RelativePath + "\\Radarograms" + "\\4.jpg") && (myJsonRadarogramData.images.jpg4[0] != 0))
                 {
@@ -1063,8 +1096,10 @@ public class ARSceneMakingManager : MonoBehaviour
                     // }
 
                     //RG_5.transform.Find("Number").GetComponent<TextMesh>().text = RG_5.GetComponent<SpriteRenderer>().sortingOrder.ToString();
-                    RG_5.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_5.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg4[1]/200f, 0);
                     RG_5.name = "radarogramPrefab_5";
+
+                    SettingForPainting(RG_5, myJsonRadarogramData.images.jpg4, 8, 9);
                 }
                 else
                 {
@@ -1092,8 +1127,10 @@ public class ARSceneMakingManager : MonoBehaviour
                     // }
 
                     //RG_4.transform.Find("Number").GetComponent<TextMesh>().text = RG_4.GetComponent<SpriteRenderer>().sortingOrder.ToString();
-                    RG_4.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_4.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg3[1]/200f, 0);
                     RG_4.name = "radarogramPrefab_4";
+
+                    SettingForPainting(RG_4, myJsonRadarogramData.images.jpg3, 6, 7);
                 }
                 else if(File.Exists(RelativePath + "\\Radarograms" + "\\3.jpg") && (myJsonRadarogramData.images.jpg3[0] != 0))
                 {
@@ -1113,8 +1150,10 @@ public class ARSceneMakingManager : MonoBehaviour
                     // }
 
                     //RG_4.transform.Find("Number").GetComponent<TextMesh>().text = RG_4.GetComponent<SpriteRenderer>().sortingOrder.ToString();
-                    RG_4.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_4.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg3[1]/200f, 0);
                     RG_4.name = "radarogramPrefab_4";
+
+                    SettingForPainting(RG_4, myJsonRadarogramData.images.jpg3, 6, 7);
                 }
                 else
                 {
@@ -1142,8 +1181,10 @@ public class ARSceneMakingManager : MonoBehaviour
                     // }
 
                     //RG_3.transform.Find("Number").GetComponent<TextMesh>().text = RG_3.GetComponent<SpriteRenderer>().sortingOrder.ToString();
-                    RG_3.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_3.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg2[1]/200f, 0);
                     RG_3.name = "radarogramPrefab_3";
+
+                    SettingForPainting(RG_3, myJsonRadarogramData.images.jpg2, 4, 5);
                 }
                 else if(File.Exists(RelativePath + "\\Radarograms" + "\\2.jpg") && (myJsonRadarogramData.images.jpg2[0] != 0))
                 {
@@ -1163,8 +1204,10 @@ public class ARSceneMakingManager : MonoBehaviour
                     // }
 
                     //RG_3.transform.Find("Number").GetComponent<TextMesh>().text = RG_3.GetComponent<SpriteRenderer>().sortingOrder.ToString();
-                    RG_3.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_3.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg2[1]/200f, 0);
                     RG_3.name = "radarogramPrefab_3";
+
+                    SettingForPainting(RG_3, myJsonRadarogramData.images.jpg2, 4, 5);
                 }
                 else
                 {
@@ -1192,8 +1235,10 @@ public class ARSceneMakingManager : MonoBehaviour
                     // }
 
                     //RG_2.transform.Find("Number").GetComponent<TextMesh>().text = RG_2.GetComponent<SpriteRenderer>().sortingOrder.ToString();
-                    RG_2.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_2.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg1[1]/200f, 0);
                     RG_2.name = "radarogramPrefab_2";
+
+                    SettingForPainting(RG_2, myJsonRadarogramData.images.jpg1, 2, 3);
                 }
                 else if(File.Exists(RelativePath + "\\Radarograms" + "\\1.jpg") && (myJsonRadarogramData.images.jpg1[0] != 0))
                 {
@@ -1213,8 +1258,10 @@ public class ARSceneMakingManager : MonoBehaviour
                     // }
 
                     //RG_2.transform.Find("Number").GetComponent<TextMesh>().text = RG_2.GetComponent<SpriteRenderer>().sortingOrder.ToString();
-                    RG_2.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_2.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg1[1]/200f, 0);
                     RG_2.name = "radarogramPrefab_2";
+
+                    SettingForPainting(RG_2, myJsonRadarogramData.images.jpg1, 2, 3);
                 }
                 else
                 {
@@ -1242,8 +1289,10 @@ public class ARSceneMakingManager : MonoBehaviour
                     // }
 
                     //RG_1.transform.Find("Number").GetComponent<TextMesh>().text = RG_1.GetComponent<SpriteRenderer>().sortingOrder.ToString();
-                    RG_1.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_1.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg0[1]/200f, 0);
                     RG_1.name = "radarogramPrefab_1";
+
+                    SettingForPainting(RG_1, myJsonRadarogramData.images.jpg0, 0, 1);
                 }
                 else if(File.Exists(RelativePath + "\\Radarograms" + "\\0.jpg") && (myJsonRadarogramData.images.jpg0[0] != 0))
                 {
@@ -1263,8 +1312,10 @@ public class ARSceneMakingManager : MonoBehaviour
                     // }
 
                     //RG_1.transform.Find("Number").GetComponent<TextMesh>().text = RG_1.GetComponent<SpriteRenderer>().sortingOrder.ToString();
-                    RG_1.transform.position += new Vector3(0, 1.5f, 0);
+                    RG_1.transform.position += new Vector3(0, (float)myJsonRadarogramData.images.jpg0[1]/200f, 0);
                     RG_1.name = "radarogramPrefab_1";
+
+                    SettingForPainting(RG_1, myJsonRadarogramData.images.jpg0, 0, 1);
                 }
                 else
                 {
@@ -1276,6 +1327,28 @@ public class ARSceneMakingManager : MonoBehaviour
         {
             TextLog.text = "Не найден файл data.json";
         }
+    }
+
+    private void SettingForPainting(GameObject radarogram, int[] jpg, int material_index1, int material_index2)
+    {
+        // растягиваем поверхности для рисования с обеих сторон под размер радарограммы
+        radarogram.transform.Find("Quad_right").transform.localScale = new Vector3(jpg[0]/100, jpg[1]/100, 1);
+        radarogram.transform.Find("Quad_left").transform.localScale = new Vector3(jpg[0]/100, jpg[1]/100, 1);
+
+        // записываем внутрь свойств поверхностей для рисования их будущее разрешение
+        radarogram.transform.Find("Quad_right").GetComponent<PaintQuadProperties>().textureSizeX = jpg[0];
+        radarogram.transform.Find("Quad_right").GetComponent<PaintQuadProperties>().textureSizeY = jpg[1];
+        radarogram.transform.Find("Quad_left").GetComponent<PaintQuadProperties>().textureSizeX = jpg[0];
+        radarogram.transform.Find("Quad_left").GetComponent<PaintQuadProperties>().textureSizeY = jpg[1];
+
+        // устанавливаем обеим плоскостям прозрачный материал для рисования
+        radarogram.transform.Find("Quad_right").GetComponent<MeshRenderer>().material = GameObject.Find("Paint").GetComponent<PaintingOnRadarograms>()._materialArray[material_index1];
+        radarogram.transform.Find("Quad_left").GetComponent<MeshRenderer>().material = GameObject.Find("Paint").GetComponent<PaintingOnRadarograms>()._materialArray[material_index2];
+        
+        // передаём в скрипт рисования коллайдер плоскостей для рисования
+        // добавляем оба коллайдера этой радарограммы в список
+        GameObject.Find("Paint").GetComponent<PaintingOnRadarograms>().AddColliderList(radarogram.transform.Find("Quad_right").GetComponent<MeshCollider>());
+        GameObject.Find("Paint").GetComponent<PaintingOnRadarograms>().AddColliderList(radarogram.transform.Find("Quad_left").GetComponent<MeshCollider>());
     }
 
     private Sprite LoadSprite(string path)
@@ -1417,6 +1490,7 @@ public class ARSceneMakingManager : MonoBehaviour
 
     public void RadarogramDownloadButton()
     {
+        GameObject.Find("Paint").GetComponent<PaintingOnRadarograms>().ColliderList_clear(); // очищаю списки коллайдеров и текстур(нарисованных пользователем, при загрузке новых радарограмм. Чтобы рисовать на них по новой)
         if (StartRadarogramOffset.text != "") // если оффсет ввели
         {
             // от нового отнимаем текущий - получаем на сколько нужно сдвинуть от текущего положения

@@ -18,6 +18,7 @@ public class Saver : MonoBehaviour
     private string[] GetCommandLineArgs;
     void Start()
     {
+        //GameObject.Find("Main Camera").GetComponent<ObjectManager>().LoadButton(); // ПРИНУДИТЕЛЬНО ЗАГРУЖАЕТ СЦЕНУ (НЕ ИСПОЛЬЗУЕТСЯ)
         arguments = new string[2];
         try
         {
@@ -55,21 +56,28 @@ public class Saver : MonoBehaviour
     public string SaveDataPath {
         get
         {
-            //_cubeDataJsonPath = GameObject.Find("InputFieldJSON").transform.Find("MyText").GetComponent<Text>().text;
+            #if UNITY_EDITOR
+                //_cubeDataJsonPath = GameObject.Find("InputFieldJSON").transform.Find("MyText").GetComponent<Text>().text;
 
-            _saveDataPath = arguments[1];
+                //_saveDataPath = arguments[1];
 
-            //_saveDataPath = "C:\\Users\\DilBert\\Downloads\\Telegram Desktop\\scenes22july\\scene.json";
+                //_saveDataPath = "C:\\Users\\DilBert\\Downloads\\Telegram Desktop\\scenes22july\\scene.json";
 
-            // if (_saveDataPath == null)
-            // {
-            //     //_saveDataPath = Path.Combine(Application.persistentDataPath, _cubeDataJsonPath);
-            //     //_saveDataPath = Path.Combine("\\ARScenes", _cubeDataJsonPath);
-            //     _saveDataPath = Path.Combine(RelativePath + "\\Scenes", _cubeDataJsonPath);
-            //     //Debug.Log(_saveDataPath);
-            // }
+                // if (_saveDataPath == null)
+                // {
+                //     //_saveDataPath = Path.Combine(Application.persistentDataPath, _cubeDataJsonPath);
+                //     //_saveDataPath = Path.Combine("\\ARScenes", _cubeDataJsonPath);
+                //     _saveDataPath = Path.Combine(RelativePath + "\\Scenes", _cubeDataJsonPath);
+                //     //Debug.Log(_saveDataPath);
+                // }
 
-            return _saveDataPath;
+                _saveDataPath =  "C:\\Users\\DilBert\\Desktop\\GEOtest\\parking.json"; // ДЛЯ СОХРАНЕНИЯ РАССТАВЛЕННОЙ ВРУЧНУЮ СЦЕНЫ В ФАЙЛ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                return _saveDataPath;
+            #endif
+            #if UNITY_STANDALONE_WIN
+                _saveDataPath = arguments[1];
+                return _saveDataPath;
+            #endif
         }
     }
 

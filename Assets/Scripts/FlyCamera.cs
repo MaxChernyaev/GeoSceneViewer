@@ -27,8 +27,9 @@ public class FlyCamera : MonoBehaviour
     public bool permissionToMoveKey = true; // для того чтобы не нажимались WASDQE, когда открыто меню настроек
     Vector3 p;
     private float sensitivity = 3; // чувствительность мышки
-    private float X, Y;
-    private float limit = 80;
+    private float X;
+    private float Y = -27.15f; // наклон камеры (ПОМЕНЯТЬ ПРИ СМЕНЕ ПОЛОЖЕНИЯ КАМЕРЫ В РЕДАКТОРЕ!!!)
+    private float limit = 90;
      
     void Update () {
         
@@ -36,11 +37,11 @@ public class FlyCamera : MonoBehaviour
         //Cursor.visible = false;
 
         // вместо использования Input.mousePosition, который читает положение курсора с экрана
-        lastMouse = Input.mousePosition - lastMouse ;
-        lastMouse = new Vector3(-lastMouse.y * camSens, lastMouse.x * camSens, 0 );
-        lastMouse = new Vector3(transform.eulerAngles.x + lastMouse.x , transform.eulerAngles.y + lastMouse.y*2, 0);
-        //transform.eulerAngles = lastMouse;
-        lastMouse =  Input.mousePosition;
+        // lastMouse = Input.mousePosition - lastMouse ;
+        // lastMouse = new Vector3(-lastMouse.y * camSens, lastMouse.x * camSens, 0 );
+        // lastMouse = new Vector3(transform.eulerAngles.x + lastMouse.x , transform.eulerAngles.y + lastMouse.y*2, 0);
+        // //transform.eulerAngles = lastMouse;
+        // lastMouse =  Input.mousePosition;
 
         if(permissionToMoveMouse)
         {
@@ -81,11 +82,15 @@ public class FlyCamera : MonoBehaviour
                 p = GetBaseInput();
         //     }
         // }
-        if (Input.GetKey(KeyCode.Space)){
+        if (Input.GetKey(KeyCode.Space)){ // уменьшение скорости
             mainSpeed = 1.0f;
         }
+        else if (Input.GetKey(KeyCode.LeftShift)) // увеличение скорости
+        {
+            mainSpeed = 40.0f;
+        }
         else{
-            mainSpeed = 10.0f;
+            mainSpeed = 10.0f; // стандартная скорость
         }
         // if (Input.GetKey (KeyCode.LeftShift)){
         //     totalRun += Time.deltaTime;
@@ -101,7 +106,7 @@ public class FlyCamera : MonoBehaviour
        
         p = p * Time.deltaTime;
         Vector3 newPosition = transform.position;
-        if (Input.GetKey(KeyCode.LeftShift)){ //If player wants to move on X and Z axis only
+        if (Input.GetKey(KeyCode.LeftControl)){ //If player wants to move on X and Z axis only
             transform.Translate(p);
             newPosition.x = transform.position.x;
             newPosition.z = transform.position.z;
