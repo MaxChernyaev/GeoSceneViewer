@@ -6,6 +6,7 @@ TagManager:
   tags:
   - BaseGizmo
   - BasePlane
+  - Radarogram
   layers:
   - Default
   - TransparentFX
@@ -15,16 +16,16 @@ TagManager:
   - UI
   - 
   - 
-  - DokoDemoPainter
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - PaintLayer_1
+  - PaintLayer_2
+  - PaintLayer_3
+  - PaintLayer_4
+  - PaintLayer_5
+  - PaintLayer_6
+  - PaintLayer_7
+  - PaintLayer_8
+  - PaintLayer_9
+  - PaintLayer_10
   - 
   - 
   - 

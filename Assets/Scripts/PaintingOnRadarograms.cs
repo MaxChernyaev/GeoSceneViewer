@@ -13,7 +13,7 @@ public class PaintingOnRadarograms : MonoBehaviour {
     [SerializeField] private TextureWrapMode _textureWrapMode;
     [SerializeField] private FilterMode _filterMode;
     [SerializeField] private Texture2D _texture = null; // раньше тут было без "= null" и в OnValidate() новая текстура создавалась не каждый раз. Пока оставлю так
-    [SerializeField] private List<Texture2D> _textureList;
+    [SerializeField] public List<Texture2D> _textureList;
     [SerializeField] private Material _material;
     [SerializeField] private Camera _camera;
     [SerializeField] private List<Collider> _colliderList;
@@ -22,9 +22,11 @@ public class PaintingOnRadarograms : MonoBehaviour {
     [SerializeField] public int _brushSize = 14;
     private int Old_brushSize; // хранит текущий размер кисти при рисовании на земле
     private bool beforePaintedOnGND = false; // true - если до этого рисовали на земле
-    [SerializeField] public Material[] _materialArray;
-    [SerializeField] private GameObject GND;
-    [SerializeField] private Material _materialGND;
+    // [SerializeField] public Material[] _materialArray;
+    [SerializeField] public List<Material> _materialArray;
+    //[SerializeField] private GameObject[] GND;
+    [SerializeField] public List<GameObject> GND;
+    // [SerializeField] private Material _materialGND;
     public bool _permissionToPainting = false;
 
     private int _oldRayX, _oldRayY;
@@ -33,9 +35,23 @@ public class PaintingOnRadarograms : MonoBehaviour {
     public bool SelectingAreaON = false; // выделение области (маски) (вкл/выкл)
     private bool NewMouseClick = true;
     private int StartPixel;
+    //[SerializeField] private LayerMask _layerMask;
+    [SerializeField] private int LayerCount;
+    [SerializeField] private LayerMask _currentLayer;
+
+    void Awake()
+    {
+        //_layerMask = ~_layerMask; // переворачиваю значение, чтобы учитывались все слои кроме этого
+    }
     void Start()
     {
-        AddColliderList(GND.GetComponent<MeshCollider>());
+
+        foreach(GameObject item in GND)
+        {
+            AddColliderList(item.GetComponent<MeshCollider>());
+        }
+        // AddColliderList(GND.GetComponent<MeshCollider>());
+        StartCoroutine("textureApplyCoroutine");
     }
 
     public void AddColliderList(Collider QuadCollider)
@@ -44,6 +60,7 @@ public class PaintingOnRadarograms : MonoBehaviour {
         _colliderList.Add(QuadCollider);
         // _collider = QuadCollider; // ВРЕМЕННО
         _material = QuadCollider.GetComponentInParent<MeshRenderer>().material;
+        _materialArray.Add(_material);
         // Если последняя добавленая плоскость не имеет текстуры
         //if (QuadCollider.GetComponentInParent<MeshRenderer>().material.mainTexture == null){
             // у последнего добавленного коллайдера берём разрешение (размер)
@@ -71,6 +88,20 @@ public class PaintingOnRadarograms : MonoBehaviour {
         _colliderList.Clear();
         _textureList.Clear();
         Start(); // добавляем заново текстуру земли
+    }
+
+    public void TextureClear() // РАБОТАЕТ СТРАННО, ИСЧЕЗАЮТ ТЕКСТУРЫ ТОЛЬКО ПОСЛЕ ТОГО КАК НАЧНЁШЬ НА НИХ РИСОВАТЬ
+    {
+        foreach (var item in _textureList)
+        {
+            Color fillColor = Color.clear;
+            Color[] fillPixels = new Color[item.width * item.height];
+            for (int i = 0; i < fillPixels.Length; i++)
+            {
+                fillPixels[i] = fillColor;
+            }
+            item.SetPixels(fillPixels);
+        }
     }
 
     void MyOnValidate() {
@@ -109,6 +140,7 @@ public class PaintingOnRadarograms : MonoBehaviour {
         if (Input.GetMouseButton(0) && _permissionToPainting) { // нажали ЛКМ и есть разрешение на рисование
             Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
+            LayerCount = GameObject.Find("Paint").GetComponent<WhichLayerActive>()._layerNumberActive;
 
             /*
             foreach (var item in _colliderList)
@@ -139,15 +171,19 @@ public class PaintingOnRadarograms : MonoBehaviour {
             }
             */
 
-            if(Physics.Raycast(ray, out hit, 100f))
+            //_currentLayer = LayerMask.NameToLayer("PaintLayer_" + LayerCount.ToString());
+            _currentLayer = LayerMask.GetMask("PaintLayer_" + LayerCount.ToString());
+
+            if(Physics.Raycast(ray, out hit, 100f, _currentLayer)) // будет учитываться столкновение только с тем слоем, который указан тут
             {
+                // Debug.Log(_layerMask.value);
                 if (EventSystem.current.IsPointerOverGameObject()){ // Это условие для того, чтобы не происходило рисование, при нажатии на Canvas!
                     return;
                 }
                 else
                 {
                     int index = _colliderList.IndexOf(hit.collider); // Номер материала, который нужно менять!
-                    //Debug.Log("index:" + index);
+                    // Debug.Log("index:" + index);
                     _material = _materialArray[index];
                     //Debug.Log("material.name:" + _material.name);
                     // if (_material.name == "alphaPaintMaterialGND")
@@ -188,7 +224,7 @@ public class PaintingOnRadarograms : MonoBehaviour {
                         _oldRayX = rayX;
                         _oldRayY = rayY;
                     }
-                    _texture.Apply();
+                    // _texture.Apply();
                 }
             }
         }
@@ -247,7 +283,7 @@ public class PaintingOnRadarograms : MonoBehaviour {
                         int pixelX = rayX + x - _brushSize / 2;
                         int pixelY = rayY + y - _brushSize / 2;
 
-                        if (pixelX >= 0 && pixelX < _textureSizeX && pixelY >= 0 && pixelY < _textureSizeY) {
+                        if (pixelX >= 0 && pixelX < _textureSizeX && pixelY >= 0 && pixelY < _textureSizeY) { // для того, чтобы не передавать координаты, которые за границей текстуры. Что приводило к линии по краю
                             // if (NewMouseClick)
                             // {
                             //     NewMouseClick = false;
@@ -273,6 +309,15 @@ public class PaintingOnRadarograms : MonoBehaviour {
                     
                 }
             }
+        }
+    }
+
+    IEnumerator textureApplyCoroutine()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(0.01f); // попытка сделать обновление текстуры быстрее, чем раз в кадр. Ничего не меняет, нужно попробовать именно красить пиксели чаще чем раз в кадр
+            _texture.Apply();
         }
     }
 

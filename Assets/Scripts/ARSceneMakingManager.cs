@@ -163,15 +163,15 @@ public class ARSceneMakingManager : MonoBehaviour
 
 
         // ДЛЯ ИЗМЕРЕНИЯ РАССТОЯНИЯ МЕЖДУ ОБЪЕКТАМИ
-        // if (GameObject.Find("point11") && GameObject.Find("point22"))
-        // {
-        //     Vector3 FirstPosition = GameObject.Find("point11").transform.position;
-        //     Vector3 SecondPosition = GameObject.Find("point22").transform.position;
-        //     Vector3 DirectionVector = SecondPosition - FirstPosition;
-        //     float MyMagnitude = DirectionVector.magnitude;
-        //     //Debug.Log("DirectionVector: " + DirectionVector.ToString());
-        //     Debug.Log("MyMagnitude: " + MyMagnitude.ToString());
-        // }
+        if (GameObject.Find("point11") && GameObject.Find("point22"))
+        {
+            Vector3 FirstPosition = GameObject.Find("point11").transform.position;
+            Vector3 SecondPosition = GameObject.Find("point22").transform.position;
+            Vector3 DirectionVector = SecondPosition - FirstPosition;
+            float MyMagnitude = DirectionVector.magnitude;
+            //Debug.Log("DirectionVector: " + DirectionVector.ToString());
+            Debug.Log("MyMagnitude: " + MyMagnitude.ToString());
+        }
     }
     
     public void InstallRadarogram()
@@ -530,7 +530,7 @@ public class ARSceneMakingManager : MonoBehaviour
             frames = 0;
             //myJsonRadarogramData = GameObject.Find("scripts").GetComponent<ObjectManager>().LoadDataJson(); // Читаю data.json
             if(File.Exists(RelativePath + "\\RyvenRadarograms" + "\\data.json"))
-            {   
+            {  
                 //SummTextLog += " DC ";
                 //TextLog.text = SummTextLog;
                 //myJsonRadarogramData = GameObject.Find("scripts").GetComponent<ObjectManager>().LoadDataJson(); // Читаю data.json
@@ -764,6 +764,7 @@ public class ARSceneMakingManager : MonoBehaviour
                         }
                     }
                 }
+                GameObject.Find("Paint").GetComponent<PaintingMode>().FirstInstallRadarogramLayers(); // эта функция должна вызываться при первом создании радарограмм, для того чтобы наложить на них нужное количество слоёв (если они были созданы до создания радарограмм)
             }
         }
     }
@@ -1322,6 +1323,7 @@ public class ARSceneMakingManager : MonoBehaviour
                     //TextLog.text = "Не найден файл 0.jpg (или не описан в data.json)";
                 }
             }
+            GameObject.Find("Paint").GetComponent<PaintingMode>().FirstInstallRadarogramLayers(); // эта функция должна вызываться при первом создании радарограмм, для того чтобы наложить на них нужное количество слоёв (если они были созданы до создания радарограмм)
         }
         else
         {
@@ -1331,24 +1333,27 @@ public class ARSceneMakingManager : MonoBehaviour
 
     private void SettingForPainting(GameObject radarogram, int[] jpg, int material_index1, int material_index2)
     {
+        Transform RadarogramsLayer1 =  radarogram.transform.Find("RadarogramsLayer1");
         // растягиваем поверхности для рисования с обеих сторон под размер радарограммы
-        radarogram.transform.Find("Quad_right").transform.localScale = new Vector3(jpg[0]/100, jpg[1]/100, 1);
-        radarogram.transform.Find("Quad_left").transform.localScale = new Vector3(jpg[0]/100, jpg[1]/100, 1);
+        RadarogramsLayer1.transform.Find("Quad_right").transform.localScale = new Vector3(jpg[0]/100, jpg[1]/100, 1);
+        RadarogramsLayer1.transform.Find("Quad_left").transform.localScale = new Vector3(jpg[0]/100, jpg[1]/100, 1);
 
         // записываем внутрь свойств поверхностей для рисования их будущее разрешение
-        radarogram.transform.Find("Quad_right").GetComponent<PaintQuadProperties>().textureSizeX = jpg[0];
-        radarogram.transform.Find("Quad_right").GetComponent<PaintQuadProperties>().textureSizeY = jpg[1];
-        radarogram.transform.Find("Quad_left").GetComponent<PaintQuadProperties>().textureSizeX = jpg[0];
-        radarogram.transform.Find("Quad_left").GetComponent<PaintQuadProperties>().textureSizeY = jpg[1];
+        RadarogramsLayer1.transform.Find("Quad_right").GetComponent<PaintQuadProperties>().textureSizeX = jpg[0] / 5; // сделал разрешение прозрачного слоя радарограмм в 5 раз меньше
+        RadarogramsLayer1.transform.Find("Quad_right").GetComponent<PaintQuadProperties>().textureSizeY = jpg[1] / 5;
+        RadarogramsLayer1.transform.Find("Quad_left").GetComponent<PaintQuadProperties>().textureSizeX = jpg[0] / 5;
+        RadarogramsLayer1.transform.Find("Quad_left").GetComponent<PaintQuadProperties>().textureSizeY = jpg[1] / 5;
 
         // устанавливаем обеим плоскостям прозрачный материал для рисования
-        radarogram.transform.Find("Quad_right").GetComponent<MeshRenderer>().material = GameObject.Find("Paint").GetComponent<PaintingOnRadarograms>()._materialArray[material_index1];
-        radarogram.transform.Find("Quad_left").GetComponent<MeshRenderer>().material = GameObject.Find("Paint").GetComponent<PaintingOnRadarograms>()._materialArray[material_index2];
+        RadarogramsLayer1.transform.Find("Quad_right").GetComponent<MeshRenderer>().material = GameObject.Find("Paint").GetComponent<PaintingOnRadarograms>()._materialArray[material_index1];
+        RadarogramsLayer1.transform.Find("Quad_left").GetComponent<MeshRenderer>().material = GameObject.Find("Paint").GetComponent<PaintingOnRadarograms>()._materialArray[material_index2];
         
         // передаём в скрипт рисования коллайдер плоскостей для рисования
         // добавляем оба коллайдера этой радарограммы в список
-        GameObject.Find("Paint").GetComponent<PaintingOnRadarograms>().AddColliderList(radarogram.transform.Find("Quad_right").GetComponent<MeshCollider>());
-        GameObject.Find("Paint").GetComponent<PaintingOnRadarograms>().AddColliderList(radarogram.transform.Find("Quad_left").GetComponent<MeshCollider>());
+        GameObject.Find("Paint").GetComponent<PaintingOnRadarograms>().AddColliderList(RadarogramsLayer1.transform.Find("Quad_right").GetComponent<MeshCollider>());
+        GameObject.Find("Paint").GetComponent<PaintingOnRadarograms>().AddColliderList(RadarogramsLayer1.transform.Find("Quad_left").GetComponent<MeshCollider>());
+
+        // GameObject.Find("Paint").GetComponent<PaintingMode>().FirstInstallRadarogramLayers(); // эта функция должна вызываться при первом создании радарограмм, для того чтобы наложить на них нужное количество слоёв (если они были созданы до создания радарограмм)
     }
 
     private Sprite LoadSprite(string path)

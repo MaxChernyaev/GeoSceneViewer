@@ -71,7 +71,7 @@ public class Saver : MonoBehaviour
                 //     //Debug.Log(_saveDataPath);
                 // }
 
-                _saveDataPath =  "C:\\Users\\DilBert\\Desktop\\GEOtest\\parking.json"; // ДЛЯ СОХРАНЕНИЯ РАССТАВЛЕННОЙ ВРУЧНУЮ СЦЕНЫ В ФАЙЛ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                _saveDataPath =  "C:\\Users\\DilBert\\Desktop\\Unity Projects\\GEOtest\\газ магистраль сцена 1 итог 17.12.2021.json"; // ДЛЯ СОХРАНЕНИЯ РАССТАВЛЕННОЙ ВРУЧНУЮ СЦЕНЫ В ФАЙЛ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 return _saveDataPath;
             #endif
             #if UNITY_STANDALONE_WIN
@@ -161,7 +161,8 @@ public class Saver : MonoBehaviour
         if(File.Exists(SaveDataPath))
         {
             string testtime = System.DateTime.Now.ToString();
-            string testname = Path.Combine(Application.persistentDataPath, _cubeDataJsonPath + testtime);
+            //string testname = Path.Combine(Application.persistentDataPath, _cubeDataJsonPath + testtime);
+            string testname = "New Scene.json";
             File.Move(SaveDataPath, testname);
         }
         //TextLog.text = "Сохраняю данные в файл...";
