@@ -71,7 +71,7 @@ public class Saver : MonoBehaviour
                 //     //Debug.Log(_saveDataPath);
                 // }
 
-                _saveDataPath =  "C:\\Users\\DilBert\\Desktop\\Unity Projects\\GEOtest\\газ магистраль сцена 1 итог 17.12.2021.json"; // ДЛЯ СОХРАНЕНИЯ РАССТАВЛЕННОЙ ВРУЧНУЮ СЦЕНЫ В ФАЙЛ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                _saveDataPath =  "C:\\Users\\chernyaev.my\\Desktop\\Unity_Projects\\GeoSceneViewer\\scene_14.01.2022 133550.json"; // ДЛЯ СОХРАНЕНИЯ РАССТАВЛЕННОЙ ВРУЧНУЮ СЦЕНЫ В ФАЙЛ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 return _saveDataPath;
             #endif
             #if UNITY_STANDALONE_WIN

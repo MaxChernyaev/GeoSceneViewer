@@ -51,7 +51,7 @@ public class PaintingOnRadarograms : MonoBehaviour {
             AddColliderList(item.GetComponent<MeshCollider>());
         }
         // AddColliderList(GND.GetComponent<MeshCollider>());
-        StartCoroutine("textureApplyCoroutine");
+        // StartCoroutine("textureApplyCoroutine");
     }
 
     public void AddColliderList(Collider QuadCollider)
@@ -85,8 +85,14 @@ public class PaintingOnRadarograms : MonoBehaviour {
 
     public void ColliderList_clear()
     {
-        _colliderList.Clear();
+        foreach(var item in _textureList)
+        {
+            Destroy(item);
+        }
         _textureList.Clear();
+        _colliderList.Clear();
+        _materialArray.Clear();
+
         Start(); // добавляем заново текстуру земли
     }
 
@@ -104,20 +110,21 @@ public class PaintingOnRadarograms : MonoBehaviour {
         }
     }
 
-    void MyOnValidate() {
-        if (_texture == null) {
-            _texture = new Texture2D(_textureSizeX, _textureSizeY);
-            clearTexture();
-        }
-        if (_texture.width != _textureSizeX) {
-            _texture.Resize(_textureSizeX, _textureSizeY);
-            clearTexture();
-        }
-        _texture.wrapMode = _textureWrapMode;
-        _texture.filterMode = _filterMode;
-        _material.mainTexture = _texture;
-        _texture.Apply();
-    }
+    // Старая функция пример, использовалась в режиме редактора, потом переделал её, но вроде уже не используется. Если что - раскомментить её!
+    // void MyOnValidate() {
+    //     if (_texture == null) {
+    //         _texture = new Texture2D(_textureSizeX, _textureSizeY);
+    //         clearTexture();
+    //     }
+    //     if (_texture.width != _textureSizeX) {
+    //         _texture.Resize(_textureSizeX, _textureSizeY);
+    //         clearTexture();
+    //     }
+    //     _texture.wrapMode = _textureWrapMode;
+    //     _texture.filterMode = _filterMode;
+    //     _material.mainTexture = _texture;
+    //     _texture.Apply();
+    // }
 
     void clearTexture() // для заполнения созданной текстуры прозрачными пикселями
     {
@@ -224,7 +231,7 @@ public class PaintingOnRadarograms : MonoBehaviour {
                         _oldRayX = rayX;
                         _oldRayY = rayY;
                     }
-                    // _texture.Apply();
+                    _texture.Apply();
                 }
             }
         }
@@ -312,13 +319,15 @@ public class PaintingOnRadarograms : MonoBehaviour {
         }
     }
 
-    IEnumerator textureApplyCoroutine()
-    {
-        while(true)
-        {
-            yield return new WaitForSeconds(0.01f); // попытка сделать обновление текстуры быстрее, чем раз в кадр. Ничего не меняет, нужно попробовать именно красить пиксели чаще чем раз в кадр
-            _texture.Apply();
-        }
-    }
+    // При использовании корутины для применения текстуры, получалось так, что при каждом нажатии на R создавалась +1 параллельная бесконечная корутина применения текстуры.
+    // И после 10ти нажатий на R было уже 10 параллелленых ненужнных! корутин. Что дико снижало FPS
+    // IEnumerator textureApplyCoroutine()
+    // {
+    //     while(true)
+    //     {
+    //         yield return new WaitForSeconds(0.01f); // попытка сделать обновление текстуры быстрее, чем раз в кадр. Ничего не меняет, нужно попробовать именно красить пиксели чаще чем раз в кадр
+    //         _texture.Apply();
+    //     }
+    // }
 
 }
