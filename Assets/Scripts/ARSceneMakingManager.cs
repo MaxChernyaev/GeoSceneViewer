@@ -1339,10 +1339,15 @@ public class ARSceneMakingManager : MonoBehaviour
         RadarogramsLayer1.transform.Find("Quad_left").transform.localScale = new Vector3(jpg[0]/100, jpg[1]/100, 1);
 
         // записываем внутрь свойств поверхностей для рисования их будущее разрешение
-        RadarogramsLayer1.transform.Find("Quad_right").GetComponent<PaintQuadProperties>().textureSizeX = jpg[0] / 5; // сделал разрешение прозрачного слоя радарограмм в 5 раз меньше
-        RadarogramsLayer1.transform.Find("Quad_right").GetComponent<PaintQuadProperties>().textureSizeY = jpg[1] / 5;
-        RadarogramsLayer1.transform.Find("Quad_left").GetComponent<PaintQuadProperties>().textureSizeX = jpg[0] / 5;
-        RadarogramsLayer1.transform.Find("Quad_left").GetComponent<PaintQuadProperties>().textureSizeY = jpg[1] / 5;
+        // RadarogramsLayer1.transform.Find("Quad_right").GetComponent<PaintQuadProperties>().textureSizeX = jpg[0] / 5; // сделал разрешение прозрачного слоя радарограмм в 5 раз меньше
+        // RadarogramsLayer1.transform.Find("Quad_right").GetComponent<PaintQuadProperties>().textureSizeY = jpg[1] / 5;
+        // RadarogramsLayer1.transform.Find("Quad_left").GetComponent<PaintQuadProperties>().textureSizeX = jpg[0] / 5;
+        // RadarogramsLayer1.transform.Find("Quad_left").GetComponent<PaintQuadProperties>().textureSizeY = jpg[1] / 5;
+
+        RadarogramsLayer1.transform.Find("Quad_right").GetComponent<PaintQuadProperties>().textureSizeX = jpg[0];
+        RadarogramsLayer1.transform.Find("Quad_right").GetComponent<PaintQuadProperties>().textureSizeY = jpg[1];
+        RadarogramsLayer1.transform.Find("Quad_left").GetComponent<PaintQuadProperties>().textureSizeX = jpg[0];
+        RadarogramsLayer1.transform.Find("Quad_left").GetComponent<PaintQuadProperties>().textureSizeY = jpg[1];
 
         // устанавливаем обеим плоскостям прозрачный материал для рисования
         RadarogramsLayer1.transform.Find("Quad_right").GetComponent<MeshRenderer>().material = GameObject.Find("Paint").GetComponent<PaintingOnRadarograms>()._materialArray[material_index1];
@@ -1365,6 +1370,7 @@ public class ARSceneMakingManager : MonoBehaviour
             Texture2D texture = new Texture2D(1, 1);
             texture.LoadImage(bytes);
             Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+            GameObject.Find("Paint").GetComponent<PaintingOnRadarograms>()._radarogramTexture.Add(texture);
             return sprite;
         }
         return null;

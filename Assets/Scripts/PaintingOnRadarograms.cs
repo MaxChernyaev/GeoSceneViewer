@@ -14,6 +14,7 @@ public class PaintingOnRadarograms : MonoBehaviour {
     [SerializeField] private FilterMode _filterMode;
     [SerializeField] private Texture2D _texture = null; // раньше тут было без "= null" и в OnValidate() новая текстура создавалась не каждый раз. Пока оставлю так
     [SerializeField] public List<Texture2D> _textureList;
+    [SerializeField] public List<Texture2D> _radarogramTexture;
     [SerializeField] private Material _material;
     [SerializeField] private Camera _camera;
     [SerializeField] private List<Collider> _colliderList;
@@ -317,6 +318,31 @@ public class PaintingOnRadarograms : MonoBehaviour {
                 }
             }
         }
+    }
+
+    public void SaveTextureButton()
+    {
+        // SaveTextureAsPNG(_radarogramTexture[2], "C:\\Users\\chernyaev.my\\Desktop\\" + "Texture" + ".png");
+        // SaveTextureAsPNG(_textureList[29], "C:\\Users\\chernyaev.my\\Desktop\\" + "Texture1" + ".png");
+        Color[] cols1 = _radarogramTexture[2].GetPixels();
+        Color[] cols2 = _textureList[29].GetPixels();
+        Color[] cols3 = new Color[cols1.Length];
+        for(int i = 0; i < cols1.Length; ++i)
+        {
+            cols3[i] = Color.Lerp(cols1[i], cols2[i], cols2[i].a);
+        }
+        //Texture2D t = new Texture2D(_textureList[29].width, _textureList[29].height, TextureFormat.ARGB32, false);
+        Texture2D t = new Texture2D(_textureList[29].width, _textureList[29].height);
+        t.SetPixels(cols3);
+        t.Apply();
+        SaveTextureAsPNG(t, "C:\\Users\\chernyaev.my\\Desktop\\" + "Texture0" + ".png");
+    }
+
+    public static void SaveTextureAsPNG(Texture2D _texture, string _fullPath)
+    {
+        byte[] _bytes =_texture.EncodeToPNG();
+        System.IO.File.WriteAllBytes(_fullPath, _bytes);
+        Debug.Log(_bytes.Length/1024  + "Kb was saved as: " + _fullPath);
     }
 
     // При использовании корутины для применения текстуры, получалось так, что при каждом нажатии на R создавалась +1 параллельная бесконечная корутина применения текстуры.
